@@ -6,7 +6,7 @@ from scrapy.selector import Selector
 
 from universities.items import University
 
-class BabsonSpider(scrapy.Spider):
+class BlueFieldSpider(scrapy.Spider):
     name = "bluefield"
     allowed_domains = ["bluefield.edu"]
     start_urls = (

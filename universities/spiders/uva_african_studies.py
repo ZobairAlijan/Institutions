@@ -36,19 +36,25 @@ class AfricanStudiesSpider(scrapy.Spider):
             if name:
                 bii['name'] = name
 
-            # title = profile_sel.xpath('//div[@class="views-field views-field-title"]/span/text()').extract()
-            # if title:
-            #     bii['title'] = title
-            #
-            # bii['division'] = 'Arts and Science'
-            # bii['institution'] = 'University of Virginia'
-            # bii['department'] = 'African American and African Studies'
-            #
-            # email = profile_sel.xpath('//div[@class="views-field views-field-field-email"]/a/text()').extract()
-            # if email:
-            #     bii['email'] = email
-            #
-            # phone = profile_sel.xpath('//div[@class="views-field views-field-field-email"]/span/text()').extract()
-            # if phone:
-            #     bii['phone'] = phone
+            title = profile_sel.xpath('//div[@class="views-field views-field-title"]/span/text()').extract()
+            if title:
+                bii['title'] = ' '.join([x.strip() for x in title[0].split('\r\n') if x.strip()])
+
+            bii['division'] = 'Arts and Science'
+            bii['institution'] = 'University of Virginia'
+            bii['department'] = 'African American and African Studies'
+
+            email = profile_sel.xpath('//div[@class="views-field views-field-field-email"]/a/text()').extract()
+            if email:
+                bii['email'] = email
+
+            phone = profile_sel.xpath('//div[@class="views-field views-field-field-email"]/span/text()').extract()
+            if phone:
+                bii['phone'] = phone
             return bii
+
+def normalize_whitespace(str):
+    import re
+    str = str.strip()
+    str = re.sub(r'\s+', ' ', str)
+    return str

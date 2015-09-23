@@ -10,7 +10,7 @@ from universities.items import uva_edu
 class AmericanStudySpider(scrapy.Spider):
     """
     Scrape all profiles from
-    http://www.mendoza.nd.edu
+    http://www.americanstudies.virginia.edu
 
     """
     name = "american"

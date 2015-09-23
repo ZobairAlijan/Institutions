@@ -7,10 +7,10 @@ from scrapy.selector import Selector
 from universities.items import University
 
 
-class MendozaNdEduSpider(scrapy.Spider):
+class ArtSpider(scrapy.Spider):
     """
     Scrape all profiles from
-    http://www.mendoza.nd.edu
+    http://www.art.virginia.edu
 
     """
     name = "art"
@@ -40,16 +40,10 @@ class MendozaNdEduSpider(scrapy.Spider):
 
             bii ['department'] = 'Art and Science'
             bii ['institution'] = 'University of Virginia'
-            #
-            # bii['institution'] = 'Mendoza College of Business'
-            #
+
             email = profile_sel.xpath('//div/p/a/@href').extract()
             if email:
                 bii['email'] = email
-            #
-            # phone = profile_sel.xpath('div/div/div[@class="person-phone"]/text()').extract()
-            # if phone:
-            #     bii['phone'] = phone
 
             url = profile_sel.xpath('//div/p/b/a/@href').extract()
             if url:

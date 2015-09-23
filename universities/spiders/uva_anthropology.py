@@ -10,7 +10,7 @@ from universities.items import uva_edu
 class anthopologySpider(scrapy.Spider):
     """
     Scrape all profiles from
-    http://www.mendoza.nd.edu
+    http://www.anthropology.virginia.edu
 
     """
     name = "anthopology"

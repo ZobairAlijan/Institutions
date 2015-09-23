@@ -7,10 +7,10 @@ from scrapy.selector import Selector
 from universities.items import uva_edu
 
 
-class American_Sign_LanguageSpider(scrapy.Spider):
+class AmericanSignLangSpider(scrapy.Spider):
     """
     Scrape all profiles from
-    http://www.mendoza.nd.edu
+    http://www.asl.virginia.edu
 
     """
     name = "asl"

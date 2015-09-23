@@ -7,10 +7,10 @@ from scrapy.selector import Selector
 from universities.items import uva_edu
 
 
-class MendozaNdEduSpider(scrapy.Spider):
+class AstronomyEduSpider(scrapy.Spider):
     """
     Scrape all profiles from
-    http://www.mendoza.nd.edu
+    http://www.astro.virginia.edu
 
     """
     name = "astro"
@@ -28,31 +28,31 @@ class MendozaNdEduSpider(scrapy.Spider):
         people_sel = sel.xpath('//table[@class="views-table cols-0"]')
 
         for profile_sel in people_sel:
-            bii = uva_edu()
+            astro = uva_edu()
 
             name = profile_sel.xpath('//tr/td/h4/a/text()').extract()
             if name:
-                bii['name'] = name
+                astro['name'] = name
 
             title = profile_sel.xpath('//tr/td/em/text()').extract()
             if title:
-                bii['title'] = title
+               astro['title'] = title
 
-            bii['department'] = 'Astronomy'
-            bii['institution'] = 'University of Virginia'
-            bii['division'] = 'Arts and Science'
+            astro['department'] = 'Astronomy'
+            astro['institution'] = 'University of Virginia'
+            astro['division'] = 'Arts and Science'
 
             email = profile_sel.xpath('//tr/td[3]/a/text()').extract().strip()
             if email:
-                bii['email'] = email
+                astro['email'] = email
 
             phone = profile_sel.xpath('//tr/td[3]/text()').extract()
             if phone:
-                bii['phone'] = phone
+                astro['phone'] = phone
 
             url = profile_sel.xpath('//tr/td/h4/a/@href').extract()
             if url:
-                bii['url'] = url
-            return bii
+                astro['url'] = url
+            return astro
 
 

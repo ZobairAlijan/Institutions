@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 
 import scrapy
-from scrapy.http import Request
 from scrapy.selector import Selector
 
 from universities.items import University
 
 
-class MendozaNdEduSpider(scrapy.Spider):
+class BioethicsSpider(scrapy.Spider):
     """
     Scrape all profiles from
-    http://www.mendoza.nd.edu
+    http://www.bioethics.virginia.edu
 
     """
     name = "bioetich"
@@ -28,32 +27,32 @@ class MendozaNdEduSpider(scrapy.Spider):
         people_sel = sel.xpath('//table[@class="views-table cols-0"]')
 
         for profile_sel in people_sel:
-            bii = University()
+            bioetich = University()
 
             name = profile_sel.xpath('//tr/td/h1/a/text()').extract()
             if name:
-                bii['name'] = name
+                bioetich['name'] = name
 
             title = profile_sel.xpath('//tr/td/h5/text()').extract()
             if title:
-                bii['title'] = title
+                bioetich['title'] = title
 
             url = profile_sel.xpath('//tr/td/h1/a/@href').extract()
             if url:
-                bii['url'] = url
+                bioetich['url'] = url
 
             phone = profile_sel.xpath('//tr/td[2]/a/text()').extract()
             if phone:
-                bii['phone'] = phone
+                bioetich['phone'] = phone
 
             email = profile_sel.xpath('//tr/td[2]/text()').extract()
             if email:
-                bii['email'] = email
+                bioetich['email'] = email
 
-            bii['department'] = "Bioethics"
-            bii['institution'] = "University of Virginia"
-            bii['division'] = "Arts and Science"
+            bioetich['department'] = "Bioethics"
+            bioetich['institution'] = "University of Virginia"
+            bioetich['division'] = "Arts and Science"
 
-            return bii
+            return bioetich
 
 

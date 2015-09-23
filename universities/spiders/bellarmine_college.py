@@ -10,7 +10,7 @@ from universities.items import University
 class BemidjiStateEduSpider(scrapy.Spider):
     """
     Scrape all profiles from
-    http://www.mendoza.nd.edu
+    http://www.bellarmine.edu
 
     """
     name = "bellarmine"

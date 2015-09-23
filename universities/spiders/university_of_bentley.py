@@ -8,10 +8,10 @@ from scrapy.selector import Selector
 from universities.items import University
 
 
-class MendozaNdEduSpider(scrapy.Spider):
+class BentleySpider(scrapy.Spider):
     """
     Scrape all profiles from
-    http://www.mendoza.nd.edu
+    http://www.bentley.edu
 
     """
     name = "bentley"
@@ -44,14 +44,6 @@ class MendozaNdEduSpider(scrapy.Spider):
                 bii['department'] = department
 
             bii['institution'] = 'Bentley University'
-
-            # email = profile_sel.xpath('div/div/div[@class="person-email"]/a/text()').extract()
-            # if email:
-            #     bii['email'] = email
-            #
-            # phone = profile_sel.xpath('div/div/div[@class="person-phone"]/text()').extract()
-            # if phone:
-            #     bii['phone'] = phone
             return bii
 
 def normalize_whitespace(str):

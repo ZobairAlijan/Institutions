@@ -9,7 +9,7 @@ from universities.items import University
 
 class BellarmineEduSpider(scrapy.Spider):
     """
-    Scrape all sfaculty profiles from
+    Scrape all faculty profiles from
     http://www.bellarmine.edu
 
     """
@@ -39,6 +39,6 @@ class BellarmineEduSpider(scrapy.Spider):
             if department:
                 bii['department'] = department
 
-            bii ['institution'] = 'Bellarmine University'
+            bii['institution'] = 'Bellarmine University'
 
             return bii

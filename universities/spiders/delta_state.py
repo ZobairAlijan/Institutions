@@ -7,10 +7,10 @@ from scrapy.selector import Selector
 from universities.items import Delta_State
 
 
-class MendozaNdEduSpider(scrapy.Spider):
+class DeltaEduSpider(scrapy.Spider):
     """
     Scrape all profiles from
-    http://www.mendoza.nd.edu
+    http://www.deltastate.edu
 
     """
     name = "delta"
