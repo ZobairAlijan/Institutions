@@ -43,13 +43,13 @@ class BlueFieldSpider(scrapy.Spider):
         title = sel.xpath('//div[@class="m-right"]/div/h3/text()').extract()
         if title:
             item['title'] = ' '.join([x.strip() for x in title[0].split('\r\n') if x.strip()])
-        #
+
         department = sel.xpath('//div[@class="m-left"]/div/p/text()').extract()
         if department:
             item['department'] = department
-        #
+
         item['institution'] = 'BlueField College'
-        #
+
         email = sel.xpath('//div[@class="m-right"]/div/div/span/a/text()').extract()
         if email:
             item ['email'] = email[0].strip()

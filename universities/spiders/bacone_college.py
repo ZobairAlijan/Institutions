@@ -39,11 +39,11 @@ class BethanyLutheranSpider(scrapy.Spider):
                 bii['title'] = title
 
             bii['institution'] = 'Bacone College'
-            email = profile_sel.xpath('//tr/td/a/text()').extract()
+            email = profile_sel.xpath('//tr/td[4]/a/text()').extract()
             if email:
                 bii['email'] = email
 
-            phone = profile_sel.xpath('//tr/td/a/text()').extract()
+            phone = profile_sel.xpath('//tr/td[4]/a[1]/text()').extract()
             if phone:
                 bii['phone'] = phone
 

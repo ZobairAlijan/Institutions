@@ -41,3 +41,5 @@ class BardSpider(scrapy.Spider):
             item['name'] = name
 
         return item
+
+    # Needs some improvement since the entire faculty information is on one plain page
