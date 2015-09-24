@@ -4,7 +4,7 @@ import scrapy
 from scrapy.http import Request
 from scrapy.selector import Selector
 
-from universities.items import BelmontAbbeyEdu
+from universities.items import University
 
 
 class BelmontAbbeyEduSpider(scrapy.Spider):
@@ -29,7 +29,7 @@ class BelmontAbbeyEduSpider(scrapy.Spider):
         people_sel = sel.xpath('//table[@id="tablepress-15"]/tbody/tr')
 
         for belmont_sel in people_sel:
-            item = BelmontAbbeyEdu()
+            item = University()
 
             last_name = belmont_sel.xpath('//tbody[@class="row-hover"]/tr/td[1]/text()').extract()
             if last_name:

@@ -25,36 +25,36 @@ class AbrahamBaldwinEduSpider(scrapy.Spider):
 
         """
         sel = Selector(response)
-        people_sel = sel.xpath('//table[@class="listingInner"]')
+        abraham_sel = sel.xpath('//table[@class="listingInner"]')
 
-        for profile_sel in people_sel:
+        for faculty_sel in abraham_sel:
             ab = University()
 
-            name = profile_sel.xpath('//tr[@class="degree"]/td/a/text()').extract()
+            name = faculty_sel.xpath('//tr[@class="degree"]/td/a/text()').extract()
             if name:
-                ab['name'] = name
+                ab['name'] = name[0].strip()
 
-            title = profile_sel.xpath('//tr[@class="degree"]/td[4]/text()').extract()
+            title = faculty_sel.xpath('//tr[@class="degree"]/td[4]/text()').extract()
             if title:
-                ab['title'] = title
+                ab['title'] = title[0].strip()
 
-            department = profile_sel.xpath('//tr[@class="degree"]/td[3]/text()').extract()
+            department = faculty_sel.xpath('//tr[@class="degree"]/td[3]/text()').extract()
             if department:
-                ab['department'] = department
+                ab['department'] = department[0].strip()
 
             ab['institution'] = 'Abraham Baldwin College'
 
-            email = profile_sel.xpath('//tr[@class="degree"]/td/p/text()').extract()[0]
+            email = faculty_sel.xpath('//tr[@class="degree"]/td/p/text()').extract()[0]
             if email:
-                ab['email'] = email
+                ab['email'] = email[0].strip()
 
-            phone = profile_sel.xpath('//tr[@class="degree"]/td/p/text()').extract()[1]
+            phone = faculty_sel.xpath('//tr[@class="degree"]/td/p/text()').extract()[1]
             if phone:
-                ab['phone'] = phone
+                ab['phone'] = phone[0].strip()
 
-            url = profile_sel.xpath('//tr[@class="degree"]/td/a/@href').extract()
+            url = faculty_sel.xpath('//tr[@class="degree"]/td/a/@href').extract()
             if url:
-                ab['url'] = url
+                ab['url'] = url[0].strip()
             return ab
 
 
