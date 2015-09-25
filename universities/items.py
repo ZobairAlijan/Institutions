@@ -44,6 +44,7 @@ class uva_edu(scrapy.Item):
     email = scrapy.Field()
     phone = scrapy.Field()
     url = scrapy.Field()
+    discipline = scrapy.Field()
 
 
 class Delta_State(scrapy.Item):
