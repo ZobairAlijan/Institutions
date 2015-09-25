@@ -20,7 +20,6 @@ class ChemSpider(scrapy.Spider):
         """
         sel = Selector(response)
 
-        links = sel.xpath('//td[@style="vertical-align: top; text-align: center; font-family: Calibri;"]')
         for link in links:
             p_link = 'http://www.virginia.edu%s' %link
             request = Request(p_link, callback=self.parse_profile_page)

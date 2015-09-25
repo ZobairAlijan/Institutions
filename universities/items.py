@@ -61,6 +61,7 @@ class University(scrapy.Item):
     name = scrapy.Field()
     title = scrapy.Field()
     department = scrapy.Field()
+    division = scrapy.Field()
     institution = scrapy.Field()
     email = scrapy.Field()
     phone = scrapy.Field()
