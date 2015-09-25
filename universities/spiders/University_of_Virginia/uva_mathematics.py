@@ -7,7 +7,7 @@ from scrapy.selector import Selector
 from universities.items import University
 
 
-class GloablSpider(scrapy.Spider):
+class MathematicsSpider(scrapy.Spider):
     """
     Scrape all profiles from
     http://www.math.virginia.edu

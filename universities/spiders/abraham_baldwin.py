@@ -32,29 +32,29 @@ class AbrahamBaldwinEduSpider(scrapy.Spider):
 
             name = faculty_sel.xpath('//tr[@class="degree"]/td/a/text()').extract()
             if name:
-                ab['name'] = name[0].strip()
+                ab['name'] = ' '.join([name.strip() for name in name])
 
             title = faculty_sel.xpath('//tr[@class="degree"]/td[4]/text()').extract()
             if title:
-                ab['title'] = title[0].strip()
+                ab['title'] = ' '.join([title.strip() for title in title])
 
             department = faculty_sel.xpath('//tr[@class="degree"]/td[3]/text()').extract()
             if department:
-                ab['department'] = department[0].strip()
+                ab['department'] = ' '.join([department.strip() for department in department])
 
             ab['institution'] = 'Abraham Baldwin College'
 
-            email = faculty_sel.xpath('//tr[@class="degree"]/td/p/text()').extract()[0]
+            email = faculty_sel.xpath('//tr[@class="degree"]/td/p/text()').extract()
             if email:
-                ab['email'] = email[0].strip()
+                ab['email'] = email
 
-            phone = faculty_sel.xpath('//tr[@class="degree"]/td/p/text()').extract()[1]
+            phone = faculty_sel.xpath('//tr[@class="degree"]/td/p/text()').extract()
             if phone:
-                ab['phone'] = phone[0].strip()
+                ab['phone'] = phone
 
             url = faculty_sel.xpath('//tr[@class="degree"]/td/a/@href').extract()
             if url:
-                ab['url'] = url[0].strip()
+                ab['url'] = url
             return ab
 
 
