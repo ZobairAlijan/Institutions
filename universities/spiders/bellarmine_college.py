@@ -7,7 +7,7 @@ from scrapy.selector import Selector
 from universities.items import University
 
 
-class BemidjiStateEduSpider(scrapy.Spider):
+class BellarmineSpider(scrapy.Spider):
     """
     Scrape all profiles from
     http://www.bellarmine.edu
