@@ -29,16 +29,16 @@ class BellarmineEduSpider(scrapy.Spider):
         people_sel = sel.xpath('//div[@class="node"]/div')
 
         for profile_sel in people_sel:
-            bii = University()
+            item = University()
 
             name = profile_sel.xpath('//div[@class="content"]/p/text()').extract()
             if name:
-                bii['name'] = name
+                item['name'] = name
 
             department = profile_sel.xpath('//div[@class="content"]/h3/text()').extract()
             if department:
-                bii['department'] = department
+                item['department'] = department
 
-            bii['institution'] = 'Bellarmine University'
+            item['institution'] = 'Bellarmine University'
 
-            return bii
+            return item

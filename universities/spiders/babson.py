@@ -7,7 +7,7 @@ from scrapy.selector import Selector
 from universities.items import University
 
 class BabsonSpider(scrapy.Spider):
-    name = "think"
+    name = "babson"
     allowed_domains = ["babson.edu"]
     start_urls = (
         'http://www.babson.edu/Academics/faculty/profiles/Pages/default.aspx',
