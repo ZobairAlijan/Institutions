@@ -18,12 +18,6 @@ class ReligionSpider(scrapy.Spider):
     start_urls = (
         'http://artsandsciences.virginia.edu/slavic/people/index.html',
     )
-    other_urls = ['http://artsandsciences.virginia.edu/slavic/people/index.html']
-
-    def start_requests(self):
-        requests = list(super(ReligionSpider, self).start_requests())
-        requests += [scrapy.Request(x, self.parse_other) for x in self.other_urls]
-        return requests
 
     def parse(self, response):
         """
@@ -42,7 +36,7 @@ class ReligionSpider(scrapy.Spider):
 
             title = psycho_sel.xpath('//dl/dd/p[@class="title"]/text()').extract()
             if title:
-                the_religion['title'] = ' '.join([title.strip() for title in title])
+                the_religion['title'] = title
 
             the_religion['department'] = 'Slavic Languages and Literature'
             the_religion['institution'] = 'University of Virginia'
@@ -54,12 +48,9 @@ class ReligionSpider(scrapy.Spider):
 
             phone = psycho_sel.xpath('//dl[@class="directory"]/dd/p[2]/text()').extract()
             if phone:
-                the_religion['phone'] = ' '.join([phone.strip() for phone in phone])
+                the_religion['phone'] = phone
 
             url = psycho_sel.xpath('//dl[@class="directory"]/dt/a/@href').extract()
             if url:
                 the_religion['url'] = ' '.join([url.strip() for url in url])
             return the_religion
-
-    def parse_other(self, response):
-        pass
