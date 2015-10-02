@@ -2,15 +2,13 @@ from os.path import exists, abspath, join, dirname
 from os import makedirs
 import string
 
-from scrapy.conf import settings
-from scrapy.xlib.pydispatch import dispatcher
-from scrapy import signals
-from scrapy.exporters import CsvItemExporter
-import datetime
-import re
+# Define your item pipelines here
+#
+# Don't forget to add your pipeline to the ITEM_PIPELINES setting
+# See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
 
-class CsvExportPipeline(object):
+class UniversitiesPipeline(object):
 
     def __init__(self):
         dispatcher.connect(self.spider_opened, signals.spider_opened)
@@ -37,14 +35,7 @@ class CsvExportPipeline(object):
 
     def process_item(self, item, spider):
         self.exporter.export_item(item)
-        for k in item.fields.iterkeys():
-            item[k] = map(lambda x: x.replace('\n', ''), item[k])
-            item[k] = map(lambda x: x.replace('\r', ''), item[k])
-        p = re.compile('[\r\n]+')
-        for k in item.fields.iterkeys():
-            item[k] = map(lambda x: p.sub('', x), item[k])
         return item
-
 
 
 

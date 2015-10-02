@@ -32,25 +32,26 @@ class MendozaNdEduSpider(scrapy.Spider):
 
             name = profile_sel.xpath('div/div/b[@class="person-fullname"]/a/text()').extract()
             if name:
-                bii['name'] = name
+                bii['name'] = name[0].strip()
 
             title = profile_sel.xpath('div/div/span[@class="person-title"]/text()').extract()
             if title:
-                bii['title'] = title
+                bii['title'] = title[0].strip()
 
             department = profile_sel.xpath('div/div/span[@class="person-department"]/a/text()').extract()
             if department:
-                bii['department'] = department
+                bii['department'] = department[0]
 
             bii['institution'] = 'Mendoza College of Business'
 
             email = profile_sel.xpath('div/div/div[@class="person-email"]/a/text()').extract()
             if email:
-                bii['email'] = email
+                bii['email'] = email[0].strip()
 
             phone = profile_sel.xpath('div/div/div[@class="person-phone"]/text()').extract()
             if phone:
-                bii['phone'] = phone
-            return bii
+                bii['phone'] = phone[0].strip()
+
+            yield bii
 
 
