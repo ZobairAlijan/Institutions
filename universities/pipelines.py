@@ -1,6 +1,12 @@
 from os.path import exists, abspath, join, dirname
+from scrapy.contrib.exporter import CsvItemExporter
+from scrapy.xlib.pydispatch import dispatcher
+from scrapy import signals
+
 from os import makedirs
 import string
+import datetime
+
 
 # Define your item pipelines here
 #
