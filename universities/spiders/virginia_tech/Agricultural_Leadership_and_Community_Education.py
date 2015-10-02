@@ -7,7 +7,7 @@ from scrapy.selector import Selector
 from universities.items import University
 
 
-class MendozaNdEduSpider(scrapy.Spider):
+class CulturalSpider(scrapy.Spider):
     """
     Scrape all faculty members profiles from
     http://www.alce.vt.edu
@@ -39,7 +39,7 @@ class MendozaNdEduSpider(scrapy.Spider):
                 item['title'] = title
             item['department'] = 'Agriculture, Leadership, and Community education'
             item['division'] = 'School of Agriculture and Life'
-            item['institution'] = 'Mendoza College of Business'
+            item['institution'] = 'Virginia Tech'
 
             email = agriculture_sel.xpath('//table[@width="100%"]//tr/td[4]/text()').extract()
             if email:
