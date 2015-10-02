@@ -13,13 +13,13 @@ class SociologySpider(scrapy.Spider):
     http://www.sociology.virginia.edu
 
     """
-    name = "socio"
+    name = "gender"
     allowed_domains = ["sociology.virginia.edu"]
     start_urls = (
-        'http://sociology.virginia.edu/people/faculty',
+        'http://wgs.virginia.edu/people/director_staff',
     )
     other_urls = [
-        'http://sociology.virginia.edu',
+        'http://wgs.virginia.edu/people/director_staff',
     ]
 
     def start_requests(self):
@@ -33,32 +33,32 @@ class SociologySpider(scrapy.Spider):
 
         """
         my_sel = Selector(response)
-        global_sel = my_sel.xpath('//ul[@class="professors"]/li')
+        global_sel = my_sel.xpath('//div[@class="view-content"]')
 
         for socio_sel in global_sel:
             item = University()
 
-            name = socio_sel.xpath('//div[@class="container"]/div/div/h2/a/text()').extract()
+            name = socio_sel.xpath('//td[@class="views-field views-field-field-position"]/h1/a/text()').extract()
             if name:
                 item['name'] = ' '.join([name.strip() for name in name])
 
-            title = socio_sel.xpath('//div[@class="details"]/h3/text()').extract()
+            title = socio_sel.xpath('//td[@class="views-field views-field-field-position"]/h5/text()').extract()
             if title:
                 item['title'] = ' '.join([title.strip() for title in title])
 
-            item['department'] = 'Sociology'
+            item['department'] = 'Women Gender and Sexuality'
             item['institution'] = 'University of Virginia'
             item['division'] = 'Arts and Science'
 
-            email = socio_sel.xpath('//a[@class="email"]/@href').extract()
+            email = socio_sel.xpath('//td[@class="views-field views-field-field-phone"]/a/text()').extract()
             if email:
                 item['email'] = email
 
-            phone = socio_sel.xpath('//div[@class="col-right"]/span/text()').extract()
+            phone = socio_sel.xpath('//td[@class="views-field views-field-field-phone"]/text()').extract()
             if phone:
                 item['phone'] = ' '.join([phone.strip() for phone in phone])
 
-            url = socio_sel.xpath('//div[@class="container"]/div/div/h2/a/@href').extract()
+            url = socio_sel.xpath('//td[@class="views-field views-field-field-position"]/h1/a/@href').extract()
             if url:
                 item['url'] = ' '.join([url.strip() for url in url])
             return item

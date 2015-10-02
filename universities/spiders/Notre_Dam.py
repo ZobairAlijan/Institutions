@@ -4,7 +4,7 @@ import scrapy
 from scrapy.http import Request
 from scrapy.selector import Selector
 
-from babson_edu.items import BabsonEduItem
+from universities.items import University
 
 
 class NotreDameUniversitySpider(scrapy.Spider):
@@ -36,8 +36,6 @@ class NotreDameUniversitySpider(scrapy.Spider):
 
         yield Request(self.start_urls[0], callback=self.parse_architecture)
 
-
-
     def parse_architecture(self, response):
         """
         Parse School of Architecture
@@ -53,7 +51,7 @@ class NotreDameUniversitySpider(scrapy.Spider):
             if link:
                 yield Request('http://architecture.nd.edu%s' %link[0], callback=self.parse_arc_profile)
             else:
-                bii = BabsonEduItem()
+                bii = University()
                 bii['name'] = p.xpath('descendant-or-self::h3/text()').extract()[0]
                 bii['title'] = p.xpath('descendant-or-self::p[2]/text()').extract()[0]
                 bii['institution'] = 'School of Architecture'
@@ -62,7 +60,7 @@ class NotreDameUniversitySpider(scrapy.Spider):
     def parse_arc_profile(self, response):
         sel = Selector(response)
 
-        bii = BabsonEduItem()
+        bii = University()
         bii['name'] = sel.xpath('//h1/text()').extract()[0]
         bii['title'] = sel.xpath('//h2/text()').extract()[0]
         bii['institution'] = 'School of Architecture'
@@ -75,7 +73,6 @@ class NotreDameUniversitySpider(scrapy.Spider):
             bii['email'] = email[0].strip()
         yield bii
 
-
     def parse_arts_and_letters(self, response):
         """
         Parse profiles page
@@ -84,9 +81,8 @@ class NotreDameUniversitySpider(scrapy.Spider):
         sel = Selector(response)
         people_sel = sel.xpath('//ul[@id="people-list"]/li')
 
-
         for profile_sel in people_sel:
-            bii = BabsonEduItem()
+            bii = University()
 
             name = profile_sel.xpath('div/div/b[@class="person-fullname"]/a/text()').extract()
             if name:

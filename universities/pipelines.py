@@ -7,6 +7,7 @@ from scrapy.xlib.pydispatch import dispatcher
 from scrapy import signals
 from scrapy.exporters import CsvItemExporter
 import datetime
+import re
 
 
 class CsvExportPipeline(object):
@@ -36,7 +37,14 @@ class CsvExportPipeline(object):
 
     def process_item(self, item, spider):
         self.exporter.export_item(item)
+        for k in item.fields.iterkeys():
+            item[k] = map(lambda x: x.replace('\n', ''), item[k])
+            item[k] = map(lambda x: x.replace('\r', ''), item[k])
+        p = re.compile('[\r\n]+')
+        for k in item.fields.iterkeys():
+            item[k] = map(lambda x: p.sub('', x), item[k])
         return item
+
 
 
 

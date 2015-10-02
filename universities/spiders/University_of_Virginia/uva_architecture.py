@@ -13,7 +13,7 @@ class ArchitectureSpider(scrapy.Spider):
     http://www.arch.virginia.edu
 
     """
-    name = "arch"
+    name = "archsssss"
     allowed_domains = ["arch.virginia.edu"]
     start_urls = (
         'http://www.arch.virginia.edu/people/directory/',

@@ -7,61 +7,66 @@ from scrapy.selector import Selector
 from universities.items import University
 
 
-class SociologySpider(scrapy.Spider):
+class NursingSpider(scrapy.Spider):
     """
     Scrape all profiles from
-    http://www.sociology.virginia.edu
+    http://www.nursing.virginia.edu
 
     """
-    name = "socio"
-    allowed_domains = ["sociology.virginia.edu"]
+    name = "nursing"
+    allowed_domains = ["nursing.virginia.edu"]
     start_urls = (
-        'http://sociology.virginia.edu/people/faculty',
+        'http://www.nursing.virginia.edu/people/facultydirectory/',
     )
+
     other_urls = [
-        'http://sociology.virginia.edu',
+        'http://www.virginia.edu',
     ]
 
     def start_requests(self):
-        requests = list(super(SociologySpider, self).start_requests())
+        requests = list(super(NursingSpider, self).start_requests())
         requests += [scrapy.Request(x, self.parse_other) for x in self.other_urls]
         return requests
 
     def parse(self, response):
         """
-        Parsing faculty members profiles page from department of Sociology
+        Parsing faculty members profiles page from School of nursing
 
         """
         my_sel = Selector(response)
-        global_sel = my_sel.xpath('//ul[@class="professors"]/li')
+        global_sel = my_sel.xpath('//div[@id="divDirectoryMain"]')
 
         for socio_sel in global_sel:
             item = University()
 
-            name = socio_sel.xpath('//div[@class="container"]/div/div/h2/a/text()').extract()
+            name = socio_sel.xpath('//p[@class="mName"]/a/text()').extract()
             if name:
                 item['name'] = ' '.join([name.strip() for name in name])
 
-            title = socio_sel.xpath('//div[@class="details"]/h3/text()').extract()
+            title = socio_sel.xpath('//div[@class="mTitle"]/p/text()').extract()
             if title:
                 item['title'] = ' '.join([title.strip() for title in title])
 
-            item['department'] = 'Sociology'
-            item['institution'] = 'University of Virginia'
-            item['division'] = 'Arts and Science'
+            department = socio_sel.xpath('//div[@class="mDept"]/p/span/text()').extract()
+            if department:
+                item['department'] = ' '.join([department.strip() for department in department])
 
-            email = socio_sel.xpath('//a[@class="email"]/@href').extract()
+            item['institution'] = 'University of Virginia'
+            item['division'] = 'School of Nursing'
+
+            email = socio_sel.xpath('//div[@class="mContact"]/p/a/text()').extract()
             if email:
                 item['email'] = email
 
-            phone = socio_sel.xpath('//div[@class="col-right"]/span/text()').extract()
+            phone = socio_sel.xpath('//div[@class="mContact"]/p/text()').extract()
             if phone:
                 item['phone'] = ' '.join([phone.strip() for phone in phone])
 
-            url = socio_sel.xpath('//div[@class="container"]/div/div/h2/a/@href').extract()
+            url = socio_sel.xpath('//p[@class="mName"]/a/@href').extract()
             if url:
                 item['url'] = ' '.join([url.strip() for url in url])
             return item
 
     def parse_other(self, response):
         pass
+

@@ -7,58 +7,58 @@ from scrapy.selector import Selector
 from universities.items import University
 
 
-class SociologySpider(scrapy.Spider):
+class CivilEngineeringSpider(scrapy.Spider):
     """
     Scrape all profiles from
     http://www.sociology.virginia.edu
 
     """
-    name = "socio"
-    allowed_domains = ["sociology.virginia.edu"]
+    name = "civil"
+    allowed_domains = ["cee.virginia.edu"]
     start_urls = (
-        'http://sociology.virginia.edu/people/faculty',
+        'http://cee.virginia.edu/faculty/',
     )
     other_urls = [
-        'http://sociology.virginia.edu',
+        'http://cee.virginia.edu/faculty/',
     ]
 
     def start_requests(self):
-        requests = list(super(SociologySpider, self).start_requests())
+        requests = list(super(CivilEngineeringSpider, self).start_requests())
         requests += [scrapy.Request(x, self.parse_other) for x in self.other_urls]
         return requests
 
     def parse(self, response):
         """
-        Parsing faculty members profiles page from department of Sociology
+        Parsing faculty members profiles page from department of Engineering and computer science
 
         """
         my_sel = Selector(response)
-        global_sel = my_sel.xpath('//ul[@class="professors"]/li')
+        engineering_sel = my_sel.xpath('//div[@id="entry-content"]')
 
-        for socio_sel in global_sel:
+        for engin_sel in engineering_sel:
             item = University()
 
-            name = socio_sel.xpath('//div[@class="container"]/div/div/h2/a/text()').extract()
+            name = engin_sel.xpath('//div[@id="display_by_rank"]/ul/li/a/text()').extract()
             if name:
                 item['name'] = ' '.join([name.strip() for name in name])
 
-            title = socio_sel.xpath('//div[@class="details"]/h3/text()').extract()
+            title = engin_sel.xpath('//div[@class="facultyinfo"]/text()').extract()
             if title:
                 item['title'] = ' '.join([title.strip() for title in title])
 
-            item['department'] = 'Sociology'
+            item['department'] = 'Civil and Enviromental Engineering'
             item['institution'] = 'University of Virginia'
-            item['division'] = 'Arts and Science'
+            item['division'] = 'School of Engineering'
 
-            email = socio_sel.xpath('//a[@class="email"]/@href').extract()
+            email = engin_sel.xpath('//div[@class="facultyinfo"]/a/text()').extract()
             if email:
                 item['email'] = email
 
-            phone = socio_sel.xpath('//div[@class="col-right"]/span/text()').extract()
+            phone = engin_sel.xpath('//tr/td[2]/text()').extract()
             if phone:
                 item['phone'] = ' '.join([phone.strip() for phone in phone])
 
-            url = socio_sel.xpath('//div[@class="container"]/div/div/h2/a/@href').extract()
+            url = engin_sel.xpath('//div[@id="display_by_rank"]/ul/li/a/@href').extract()
             if url:
                 item['url'] = ' '.join([url.strip() for url in url])
             return item
