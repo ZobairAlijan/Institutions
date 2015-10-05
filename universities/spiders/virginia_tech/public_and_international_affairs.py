@@ -13,10 +13,10 @@ class CulturalSpider(scrapy.Spider):
     http://www.alce.vt.edu
 
     """
-    name = "alce"
-    allowed_domains = ["alce.vt.edu"]
+    name = "public"
+    allowed_domains = ["spia.vt.edu"]
     start_urls = (
-        'http://www.alce.vt.edu/people/faculty-staff/index.html',
+        'http://www.spia.vt.edu/people',
     )
 
     def parse(self, response):
@@ -25,12 +25,12 @@ class CulturalSpider(scrapy.Spider):
 
         """
         sel = Selector(response)
-        people_sel = sel.xpath('//div[@class="col-lg-9"]')
+        people_sel = sel.xpath('//div[@class="field-items"]//div/a/@href')
 
         for agriculture_sel in people_sel:
             item = University()
 
-            name = agriculture_sel.xpath('//table[@width="100%"]//tr/td/a/text()').extract()
+            name = agriculture_sel.xpath('//div[@class="row"]/div/h60/text()').extract()
             if name:
                 item['name'] = name
 
@@ -48,5 +48,4 @@ class CulturalSpider(scrapy.Spider):
             phone = agriculture_sel.xpath('//table[@width="100%"]//tr/td[5]/a/text()').extract()
             if phone:
                 item['phone'] = phone
-
-            yield item
+            return item

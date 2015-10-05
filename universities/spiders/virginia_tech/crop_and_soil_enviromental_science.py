@@ -10,18 +10,18 @@ from universities.items import University
 class CulturalSpider(scrapy.Spider):
     """
     Scrape all faculty members profiles from
-    http://www.alce.vt.edu
+    http://www.cses.vt.edu
 
     """
-    name = "alce"
-    allowed_domains = ["alce.vt.edu"]
+    name = "soil"
+    allowed_domains = ["cses.vt.edu"]
     start_urls = (
-        'http://www.alce.vt.edu/people/faculty-staff/index.html',
+        'http://www.cses.vt.edu/people/tenure/index.html',
     )
 
     def parse(self, response):
         """
-        Parse profiles page from department of Agriculture, Leadership, and Community education
+        Parse profiles page from department of Crop, Soil, and Environmental Science
 
         """
         sel = Selector(response)
@@ -30,22 +30,22 @@ class CulturalSpider(scrapy.Spider):
         for agriculture_sel in people_sel:
             item = University()
 
-            name = agriculture_sel.xpath('//table[@width="100%"]//tr/td/a/text()').extract()
+            name = agriculture_sel.xpath('//td[@style=" width: 195px;"]/a/text()').extract()
             if name:
                 item['name'] = name
 
-            title = agriculture_sel.xpath('//table[@width="100%"]//tr/td[2]/text()').extract()
+            title = agriculture_sel.xpath('//td[@style=" width: 138px;"]/text()').extract()
             if title:
                 item['title'] = title
-            item['department'] = 'Agriculture, Leadership, and Community education'
+            item['department'] = 'Crop, Soil, and Environmental Science'
             item['division'] = 'College of Agriculture and Life Sciences'
             item['institution'] = 'Virginia Tech'
 
-            email = agriculture_sel.xpath('//table[@width="100%"]//tr/td[4]/text()').extract()
+            email = agriculture_sel.xpath('//td[@style =" width: 163px;"]/a/text()').extract()
             if email:
                 item['email'] = email
 
-            phone = agriculture_sel.xpath('//table[@width="100%"]//tr/td[5]/a/text()').extract()
+            phone = agriculture_sel.xpath('//td[@style =" width: 117px;"]/text()').extract()
             if phone:
                 item['phone'] = phone
 

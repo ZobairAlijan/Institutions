@@ -7,7 +7,7 @@ from scrapy.selector import Selector
 from universities.items import University
 
 
-class AnimalPaultrySpider(scrapy.Spider):
+class AnimalSpider(scrapy.Spider):
     """
     Scrape all faculty members profiles from
     http://www.apsc.vt.edu
@@ -38,7 +38,7 @@ class AnimalPaultrySpider(scrapy.Spider):
             if title:
                 animal_item['title'] = title
             animal_item['department'] = 'Animal and Poultry'
-            animal_item['division'] = 'School of Agriculture and Life'
+            animal_item['division'] = 'College of Agriculture and Life Sciences'
             animal_item['institution'] = 'Virginia Tech'
 
             email = agriculture_sel.xpath('//tr/td[2]/a/text()').extract()

@@ -69,4 +69,3 @@ class AmericanSignSpider(scrapy.Spider):
 
     def parse_other(self, response):
         pass
-
