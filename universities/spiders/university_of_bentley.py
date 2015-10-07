@@ -33,15 +33,15 @@ class BentleySpider(scrapy.Spider):
 
             name = profile_sel.xpath('//span/h2/text()').extract()
             if name:
-                bii['name'] = name
+                bii['name'] = ' '.join([x.strip() for x in name[0].split('\r\n') if x.strip()])
 
             title = profile_sel.xpath('//h3/span/text()').extract()
             if title:
-                bii['title'] = title
+                bii['title'] = ' '.join([x.strip() for x in name[0].split('\r\n') if x.strip()])
 
             department = profile_sel.xpath('//div[@class="views-field views-field-text-3"]/span/text()').extract()
             if department:
-                bii['department'] = department
+                bii['department'] = department[0].strip()
 
             bii['institution'] = 'Bentley University'
             return bii

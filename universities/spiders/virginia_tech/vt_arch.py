@@ -4,7 +4,7 @@ import scrapy
 from scrapy.http import Request
 from scrapy.selector import Selector
 
-from universities.items import University
+from universities.items import BabsonEduItem
 
 
 class BabsonEduSpider(scrapy.Spider):
@@ -13,7 +13,7 @@ class BabsonEduSpider(scrapy.Spider):
     http://www.babson.edu
 
     """
-    name = "a"
+    name = "ba"
     allowed_domains = ["archdesign.vt.edu"]
     start_urls = (
         'http://www.archdesign.vt.edu/faculty/',
@@ -28,10 +28,11 @@ class BabsonEduSpider(scrapy.Spider):
 
         links = sel.xpath('//ul[@class="faculty-list"]/li/a/@href').extract()
         for link in links:
-            p_link = 'http://www.archdesign.vt.edu%s'%link
+            p_link = 'http://www.archdesign.vt.edu%s' %link
             request = Request(p_link,
-                              callback=self.parse_profile_page)
+                callback=self.parse_profile_page)
             yield request
+
 
     def parse_profile_page(self, response):
         """
@@ -39,34 +40,26 @@ class BabsonEduSpider(scrapy.Spider):
 
         """
 
-        bii = University()
+        bii = BabsonEduItem()
 
         sel = Selector(response)
 
         name = sel.xpath('//div[@class="faculty-page"]/h2/text()').extract()
         if name:
-            bii['name'] = name
+            bii['name'] = ' '.join([x.strip() for x in name[0].split('\r\n') if x.strip()])
+
+        title = sel.xpath('//div[@class="faculty-page"]/h3/text()').extract()
+        if title:
+            bii['title'] = ' '.join([x.strip() for x in title[0].split('\r\n') if x.strip()])
+
+        bii['department'] = 'Architecture and design'
+        bii['disvision'] = 'School of Architecture and design'
+        bii['institution'] = 'Virginia Teh'
+
+        email = sel.xpath('//div[@class="faculty-page"]/p[5]/text()').extract()
+        if email:
+            bii['email'] = email[0].strip()
 
         return bii
-
-        # title = sel.xpath('//div[@class="responsive-profile__bio responsive-profile__main-col"]/h2/text()').extract()
-        # if title:
-        #     bii['title'] = ' '.join([x.strip() for x in title[0].split('\r\n') if x.strip()])
-        #
-        # department = sel.xpath('//span[contains(text(), "Academic Division")]/following-sibling::div/a/text()').extract()
-        # if department:
-        #     bii['department'] = department[0]
-        #
-        # bii['institution'] = 'Babson College'
-        #
-        # email = sel.xpath('//span[contains(text(), "Contact")]/following-sibling::div/a/text()').extract()
-        # if email:
-        #     bii['email'] = email[0].strip()
-        #
-        # phone = sel.xpath('//span[contains(text(), "Contact")]/following-sibling::div/text()').extract()
-        # if phone:
-        #     bii['phone'] = phone[0].strip()
-
-
 
 

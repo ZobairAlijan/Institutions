@@ -39,32 +39,32 @@ class BabsonEduSpider(scrapy.Spider):
 
         """
 
-        bii = BabsonEduItem()
+        item = BabsonEduItem()
 
         sel = Selector(response)
 
         name = sel.xpath('//div[@id="content-core"]/h1/text()').extract()
         if name:
-            bii['name'] = ' '.join([x.strip() for x in name[0].split('\r\n') if x.strip()])
+            item['name'] = ' '.join([x.strip() for x in name[0].split('\r\n') if x.strip()])
 
         title = sel.xpath('//div[@class="responsive-profile__bio responsive-profile__main-col"]/h2/text()').extract()
         if title:
-            bii['title'] = ' '.join([x.strip() for x in title[0].split('\r\n') if x.strip()])
+            item['title'] = ' '.join([x.strip() for x in title[0].split('\r\n') if x.strip()])
 
         department = sel.xpath('//span[contains(text(), "Academic Division")]/following-sibling::div/a/text()').extract()
         if department:
-            bii['department'] = department[0]
+            item['department'] = department[0]
 
-        bii['institution'] = 'Babson College'
+        item['institution'] = 'Babson College'
 
         email = sel.xpath('//span[contains(text(), "Contact")]/following-sibling::div/a/text()').extract()
         if email:
-            bii['email'] = email[0].strip()
+            item['email'] = email[0].strip()
 
         phone = sel.xpath('//span[contains(text(), "Contact")]/following-sibling::div/text()').extract()
         if phone:
-            bii['phone'] = phone[0].strip()
+            item['phone'] = phone[0].strip()
 
-        return bii
+        return item
 
 

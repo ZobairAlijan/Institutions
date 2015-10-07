@@ -43,9 +43,9 @@ class CulturalSpider(scrapy.Spider):
 
             email = agriculture_sel.xpath('//table[@width="100%"]//tr/td[4]/text()').extract()
             if email:
-                item['email'] = email
+                item['email'] = email.strip()[0]
 
             phone = agriculture_sel.xpath('//table[@width="100%"]//tr/td[5]/a/text()').extract()
             if phone:
-                item['phone'] = phone
+                item['phone'] = phone.strip()[0]
             return item
