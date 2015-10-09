@@ -13,7 +13,7 @@ class BrynMawrSpider(scrapy.Spider):
     http://www.bucknell.edu
 
     """
-    name = "bucknell"
+    name = "buck"
     allowed_domains = ["bucknell.edu"]
     start_urls = (
         'http://www.bucknell.edu/script/communication/EverythingDirectory/',

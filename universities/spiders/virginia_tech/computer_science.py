@@ -7,7 +7,7 @@ from scrapy.selector import Selector
 from universities.items import University
 
 
-class BabsonEduSpider(scrapy.Spider):
+class ComputerScienceSpider(scrapy.Spider):
     """
     Scrape all faculty members profiles from
     http://www.cs.vt.edu
@@ -30,7 +30,7 @@ class BabsonEduSpider(scrapy.Spider):
         for link in links:
             p_link = 'http://www.cs.vt.edu%s' %link
             request = Request(p_link,
-                callback=self.parse_profile_page)
+                              callback=self.parse_profile_page)
             yield request
 
     def parse_profile_page(self, response):

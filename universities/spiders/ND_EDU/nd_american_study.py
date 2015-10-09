@@ -13,20 +13,11 @@ class AmericanSignSpider(scrapy.Spider):
     http://www.nursing.virginia.edu
 
     """
-    name = "nursing"
+    name = "nurs"
     allowed_domains = ["americanstudies.nd.edu"]
     start_urls = (
         'http://americanstudies.nd.edu/faculty-and-staff/',
     )
-
-    other_urls = [
-        'http://www.nd.edu',
-    ]
-
-    def start_requests(self):
-        requests = list(super(AmericanSignSpider, self).start_requests())
-        requests += [scrapy.Request(x, self.parse_other) for x in self.other_urls]
-        return requests
 
     def parse(self, response):
         """
@@ -51,8 +42,8 @@ class AmericanSignSpider(scrapy.Spider):
             if department:
                 item['department'] = ' '.join([department.strip() for department in department])
 
-            item['institution'] = 'University of Virginia'
-            item['division'] = 'School of Nursing'
+            # item['institution'] = 'University of Virginia'
+            # item['division'] = 'School of Nursing'
 
             email = socio_sel.xpath('//div[@class="mContact"]/p/a/text()').extract()
             if email:
@@ -66,6 +57,3 @@ class AmericanSignSpider(scrapy.Spider):
             if url:
                 item['url'] = ' '.join([url.strip() for url in url])
             return item
-
-    def parse_other(self, response):
-        pass

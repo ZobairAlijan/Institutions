@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import scrapy
-from scrapy.http import Request
 from scrapy.selector import Selector
 
 from universities.items import University
@@ -28,28 +27,28 @@ class BethanyLutheranSpider(scrapy.Spider):
         people_sel = sel.xpath('//table[@class="directory table table-bordered"]')
 
         for profile_sel in people_sel:
-            bii = University()
+            bacone = University()
 
-            name = profile_sel.xpath('//td/a[1]/b/text()').extract()
+            name = profile_sel.xpath('//table[@class="directory table table-bordered"]//tr/td/a/b/text()').extract()
             if name:
-                bii['name'] = name
+                bacone['name'] = name
 
-            title = profile_sel.xpath('//tr/td[2]/text()').extract()
+            title = profile_sel.xpathsel.xpath('//table[@class="directory table table-bordered"]//tr//td[2]/text()').extract()
             if title:
-                bii['title'] = ' '.join([title.strip() for title in title])
+                bacone['title'] = ' '.join([title.strip() for title in title])
 
-            bii['institution'] = 'Bacone College'
-            email = profile_sel.xpath('//tr/td[4]/a/text()').extract()
+            bacone['institution'] = 'Bacone College'
+            email = profile_sel.xpath('//table[@class="directory table table-bordered"]//tr//td[2]/text()').extract()
             if email:
-                bii['email'] = email
+                bacone['email'] = email
 
-            phone = profile_sel.xpath('//tr/td[4]/a[1]/text()').extract()
+            phone = profile_sel.xpath('//table[@class="directory table table-bordered"]//tr/td/a/text()').extract()
             if phone:
-                bii['phone'] = phone
+                bacone['phone'] = phone
 
-            url = profile_sel.xpath('//tr/td[1]/a/@href').extract()
+            url = profile_sel.xpath('//table[@class="directory table table-bordered"]//tr/td[1]/a[1]/@href').extract()
             if url:
-                bii['url'] = url
-            return bii
+                bacone['url'] = url
+            return bacone
 
 
