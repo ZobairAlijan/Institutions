@@ -18,7 +18,9 @@ class EnglishSpider(scrapy.Spider):
             yield scrapy.Request(response.urljoin(e_url), meta={}, callback=self.parse_member)
 
     def parse_member(self, response):
-        params = dict(name=response.xpath('//h1[@class="page-title"]/text()').extract_first())
+        params = dict(
+            name=response.xpath('//h1[@class="page-title"]/text()').extract_first()
+        )
         params['email'] = response.xpath('//main//a[contains(@href,"mailto:")]/text()').extract_first()
 
         try:

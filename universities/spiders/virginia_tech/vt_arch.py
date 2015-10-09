@@ -7,10 +7,10 @@ from scrapy.selector import Selector
 from universities.items import BabsonEduItem
 
 
-class BabsonEduSpider(scrapy.Spider):
+class ArchEduSpider(scrapy.Spider):
     """
     Scrape all profiles from
-    http://www.babson.edu
+    http://www.arch.edu
 
     """
     name = "ba"
@@ -30,9 +30,8 @@ class BabsonEduSpider(scrapy.Spider):
         for link in links:
             p_link = 'http://www.archdesign.vt.edu%s' %link
             request = Request(p_link,
-                callback=self.parse_profile_page)
+                              callback=self.parse_profile_page)
             yield request
-
 
     def parse_profile_page(self, response):
         """
@@ -40,26 +39,26 @@ class BabsonEduSpider(scrapy.Spider):
 
         """
 
-        bii = BabsonEduItem()
+        this_arch = BabsonEduItem()
 
         sel = Selector(response)
 
         name = sel.xpath('//div[@class="faculty-page"]/h2/text()').extract()
         if name:
-            bii['name'] = ' '.join([x.strip() for x in name[0].split('\r\n') if x.strip()])
+            this_arch['name'] = ' '.join([x.strip() for x in name[0].split('\r\n') if x.strip()])
 
         title = sel.xpath('//div[@class="faculty-page"]/h3/text()').extract()
         if title:
-            bii['title'] = ' '.join([x.strip() for x in title[0].split('\r\n') if x.strip()])
+            this_arch['title'] = ' '.join([x.strip() for x in title[0].split('\r\n') if x.strip()])
 
-        bii['department'] = 'Architecture and design'
-        bii['disvision'] = 'School of Architecture and design'
-        bii['institution'] = 'Virginia Teh'
+        this_arch['department'] = 'Architecture and design'
+        this_arch['disvision'] = 'School of Architecture and design'
+        this_arch['institution'] = 'Virginia Teh'
 
         email = sel.xpath('//div[@class="faculty-page"]/p[5]/text()').extract()
         if email:
-            bii['email'] = email[0].strip()
+            this_arch['email'] = email[0].strip()
 
-        return bii
+        return this_arch
 
 
