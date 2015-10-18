@@ -4,7 +4,7 @@ import scrapy
 from scrapy.http import Request
 from scrapy.selector import Selector
 
-from universities.items import BabsonEduItem
+from universities.items import University
 
 
 class BabsonEduSpider(scrapy.Spider):
@@ -34,9 +34,8 @@ class BabsonEduSpider(scrapy.Spider):
         for link in links:
             p_link = 'http://www.aoe.vt.edu%s' %link
             request = Request(p_link,
-                callback=self.parse_profile_page)
+                              callback=self.parse_profile_page)
             yield request
-
 
     def parse_profile_page(self, response):
         """
@@ -44,7 +43,7 @@ class BabsonEduSpider(scrapy.Spider):
 
         """
 
-        item = BabsonEduItem()
+        item = University()
 
         sel = Selector(response)
 

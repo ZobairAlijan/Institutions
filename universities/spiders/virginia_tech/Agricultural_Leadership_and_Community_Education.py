@@ -48,5 +48,4 @@ class CulturalSpider(scrapy.Spider):
             phone = agriculture_sel.xpath('//table[@width="100%"]//tr/td[5]/a/text()').extract()
             if phone:
                 item['phone'] = phone
-
             yield item

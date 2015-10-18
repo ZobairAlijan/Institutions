@@ -60,10 +60,10 @@ class AgricultureSpider(scrapy.Spider):
 
         email = sel.xpath('//li[@class="vt_cl_email"]/a/text()').extract()
         if email:
-            item['title'] = ' '.join([x.strip() for x in email[0].split('\r\n') if x.strip()])
+            item['email'] = ' '.join([x.strip() for x in email[0].split('\r\n') if x.strip()])
 
         phone = sel.xpath('//li[@class="vt_cl_phone"]/text()').extract()
         if phone:
-            item['title'] = ' '.join([x.strip() for x in phone[0].split('\r\n') if x.strip()])
+            item['phone'] = ' '.join([x.strip() for x in phone[0].split('\r\n') if x.strip()])
 
         return item
