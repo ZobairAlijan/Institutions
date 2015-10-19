@@ -37,7 +37,7 @@ class BentleySpider(scrapy.Spider):
 
             title = profile_sel.xpath('//h3/span/text()').extract()
             if title:
-                bii['title'] = ' '.join([x.strip() for x in name[0].split('\r\n') if x.strip()])
+                bii['title'] = ' '.join([x.strip() for x in title[0].split('\r\n') if x.strip()])
 
             department = profile_sel.xpath('//div[@class="views-field views-field-text-3"]/span/text()').extract()
             if department:

@@ -12,7 +12,6 @@ class MusicSpider(scrapy.Spider):
     )
 
     def parse(self, response):
-        # yield scrapy.Request('http://music.nd.edu/people/faculty/pierpaolo-polzonetti/', meta={}, callback=self.parse_member)
 
         for i in xrange(2,5):
             for e_url in response.xpath('//main/ul[%d]/li/a/@href' % i).extract():

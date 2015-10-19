@@ -7,28 +7,28 @@ from scrapy.selector import Selector
 from universities.items import University
 
 
-class FilmTvTheatreSpider(scrapy.Spider):
+class PoliticalScienceSpider(scrapy.Spider):
     """
     Scrape all faculty members profiles from
-    http://www.romance.nd.edu
+    http://www.politicalscience.nd.edu
 
     """
-    name = "film"
-    allowed_domains = ["ftt.nd.edu"]
+    name = "politicalscience"
+    allowed_domains = ["politicalscience.nd.edu"]
     start_urls = (
-        'http://ftt.nd.edu/faculty-staff/',
+        'http://politicalscience.nd.edu/faculty/faculty-list/',
     )
 
     def parse(self, response):
         """
-        Getting links from department of Film, Television and Theatre
+        Getting links from Notre Dame university's politicalscience.nd.edu department
 
         """
         selection = Selector(response)
 
-        design_links = selection.xpath('//ul[@class="col-grid"]//ul/li/a/@href').extract()
+        design_links = selection.xpath('//ul[@id="faculty-by-alpha"]/li/a/@href').extract()
         for this_link in design_links:
-            p_link = 'http://www.ftt.nd.edu%s' % this_link
+            p_link = 'http://www.politicalscience.nd.edu%s' % this_link
             request = Request(p_link,
                               callback=self.parse_art_history)
             print request
@@ -37,32 +37,30 @@ class FilmTvTheatreSpider(scrapy.Spider):
     def parse_art_history(self, response):
         """
         Parse profile page
+
         """
 
         history_design = University()
 
         sel = Selector(response)
 
-        name = sel.xpath('//h1[@class="page-title"]/text()').extract()
+        name = sel.xpath('//div[@id="content"]/h1/text()').extract()
         if name:
             history_design['name'] = ' '.join([x.strip() for x in name[0].split('\r\n') if x.strip()])
 
-        title = sel.xpath('//main[@role="main"]/p[2]/strong/text()').extract()
+        title = sel.xpath('//div[@id="content"]/text()').extract()
         if title:
-            history_design['title'] = ' '.join([x.strip() for x in title[0].split('\r\n') if x.strip()])
+            history_design['title'] = ' '.join([title.strip() for title in title])
 
-        department = sel.xpath('//main[@role="main"]/p[2]/strong/text()').extract()
-        if department:
-            history_design['department'] = ' '.join([x.strip() for x in department[1].split('\r\n') if x.strip()])
-
+        history_design['department'] = 'Political Science'
         history_design['division'] = 'College of Arts and Letters'
         history_design['institution'] = 'Notre Dame'
 
-        phone = sel.xpath('//main[@role="main"]/p[3]/text()').extract()
+        phone = sel.xpath('//p[contains(text(), "Phone:")]/following-sibling::strong/text()').extract()
         if phone:
-            history_design['phone'] = ' '.join(phone for phone in phone if phone.isdigit())
+            history_design['phone'] = ''.join(phone for phone in phone if phone.isdigit())
 
-        email = sel.xpath('//main[@role="main"]/p[3]/a/text()').extract()
+        email = sel.xpath('//p[contains(text(), "Email:")]/following-sibling::strong/a/text()').extract()
         if email:
             history_design['email'] = email[0].strip()
         return history_design

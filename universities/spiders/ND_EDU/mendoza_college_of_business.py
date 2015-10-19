@@ -52,6 +52,10 @@ class MendozaNdEduSpider(scrapy.Spider):
             if phone:
                 item['phone'] = phone[0].strip()
 
+            url = profile_sel.xpath('div/div/b[@class="person-fullname"]/a/@href').extract()
+            if url:
+                item['url'] = url
+
             yield item
 
 
