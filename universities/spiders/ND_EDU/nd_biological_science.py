@@ -7,10 +7,10 @@ from scrapy.selector import Selector
 from universities.items import University
 
 
-class NdBiologicalScienceSpider(scrapy.Spider):
+class NdBiologicySpider(scrapy.Spider):
     """
-    Scrape all profiles from
-    http://www.biology.nd.edu
+    Scrape all faculty members profiles from
+    http://www.romance.nd.edu
 
     """
     name = "nd_biology"
@@ -21,34 +21,53 @@ class NdBiologicalScienceSpider(scrapy.Spider):
 
     def parse(self, response):
         """
-        Parse profiles page
+        Getting links from department of Biological Science
 
         """
+        selection = Selector(response)
+
+        design_links = selection.xpath('//div[@id="page-content"]//tr/td/strong/a/@href').extract() + \
+            selection.xpath('//div[@id="page-content"]//tr/td/a/@href').extract()
+
+        for this_link in design_links:
+            p_link = 'http://www.biology.nd.edu%s' % this_link
+            request = Request(p_link,
+                              callback=self.parse_art_history)
+            print request
+            yield request
+
+    def parse_art_history(self, response):
+        """
+        Parse profile page
+        """
+
+        history_design = University()
+
         sel = Selector(response)
-        people_sel = sel.xpath('//div[@id="page-content"]')
 
-        for profile_sel in people_sel:
-            bii = University()
+        name = sel.xpath('//div[@class="faculty"]/h1/text()').extract()
+        if name:
+            history_design['name'] = ' '.join([x.strip() for x in name[0].split('\r\n') if x.strip()])
 
-            name = profile_sel.xpath('//div[@id="page-content"]//tr/td[2]/strong/a/text()').extract() + \
-                profile_sel.xpath('//div[@id="page-content"]//tr/td[2]/p/a/strong/text()').extract()
+        title = sel.xpath('//div[@class="faculty"]/p/strong/text()').extract()
+        if title:
+            history_design['title'] = ' '.join([x.strip() for x in title[0].split('\r\n') if x.strip()])
 
-            if name:
-                bii['name'] = name
+        department = sel.xpath('//div[@class="faculty"]/h3/text()').extract()
+        if department:
+            history_design['department'] = ' '.join([x.strip() for x in department[1].split('\r\n') if x.strip()])
 
-            title = profile_sel.xpath('//div[@id="page-content"]//tr/td[2]/text()').extract()
-            if title:
-                bii['title'] = ' '.join([title.strip() for title in title])
+        history_design['division'] = 'Science'
+        history_design['institution'] = 'Notre Dame'
 
-            bii['department'] = 'Biological Science'
-            bii['division'] = 'College of Science'
-            bii['institution'] = 'Notre Dame'
+        email = sel.xpath('//div[@class="faculty"]/p/a/@href').extract()
+        if email:
+            history_design['email'] = email[0].strip()
+        return history_design
 
-            email = profile_sel.xpath('//div[@id="page-content"]//tr/td[2]/strong/a/@href').extract() + \
-                profile_sel.xpath('//div[@id="page-content"]//tr/td[2]/p/a/strong/@href').extract()
-            if email:
-                bii['email'] = email
+"""
+The department of Art Design in Notre Dame also has the following information for faculty members
 
-            return bii
+Degree and Bio
 
-
+"""
