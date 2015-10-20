@@ -36,10 +36,10 @@ class EnglishSpider(scrapy.Spider):
 
         yield University(**params)
 
-    def get_phone_number(self, lst):
-        for e in lst:
-            if re.match(r'\s+?(\(\d{3}-?\)\s?\d{3}\s?-\s?\d{3})', e) is not None \
-                    or re.match(r'\s+?\d{3}-\d{2}-\d{3}-\d{3}-\d{4}', e) is not None:
-                return e.replace('\r', '').replace('\n', '')
+    def get_phone_number(self, minimus):
+        for maximus in minimus:
+            if re.match(r'\s+?(\(\d{3}-?\)\s?\d{3}\s?-\s?\d{3})', minimus) is not None \
+                    or re.match(r'\s+?\d{3}-\d{2}-\d{3}-\d{3}-\d{4}', minimus) is not None:
+                return maximus.replace('\r', '').replace('\n', '')
 
 

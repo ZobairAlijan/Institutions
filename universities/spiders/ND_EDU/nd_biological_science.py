@@ -49,6 +49,6 @@ class NdBiologicalScienceSpider(scrapy.Spider):
             if email:
                 bii['email'] = email
 
-            yield bii
+            return bii
 
 

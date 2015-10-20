@@ -7,13 +7,13 @@ from scrapy.selector import Selector
 from universities.items import University
 
 
-class AmericanSignSpider(scrapy.Spider):
+class BabsonEduSpider(scrapy.Spider):
     """
     Scrape all profiles from
-    http://www.nursing.virginia.edu
+    http://www.americanstudies.nd.edu
 
     """
-    name = "nurs"
+    name = "american"
     allowed_domains = ["americanstudies.nd.edu"]
     start_urls = (
         'http://americanstudies.nd.edu/faculty-and-staff/',
@@ -21,39 +21,54 @@ class AmericanSignSpider(scrapy.Spider):
 
     def parse(self, response):
         """
-        Parsing faculty members profiles page from School of nursing
+        Get links to profiles
 
         """
-        my_sel = Selector(response)
-        global_sel = my_sel.xpath('//div[@id="divDirectoryMain"]')
+        sel = Selector(response)
 
-        for socio_sel in global_sel:
-            item = University()
+        links = sel.xpath('//div[@id="alpha"]//p/strong/a/@href').extract()
+        for link in links:
+            p_link = 'http://www.americanstudies.nd.edu%s' %link
+            request = Request(p_link,
+                              callback=self.parse_profile_page)
+            yield request
 
-            name = socio_sel.xpath('//p[@class="mName"]/a/text()').extract()
-            if name:
-                item['name'] = ' '.join([name.strip() for name in name])
+    def parse_profile_page(self, response):
+        """
+        Parse profile page
 
-            title = socio_sel.xpath('//div[@class="mTitle"]/p/text()').extract()
-            if title:
-                item['title'] = ' '.join([title.strip() for title in title])
+        """
+        bii = University()
 
-            department = socio_sel.xpath('//div[@class="mDept"]/p/span/text()').extract()
-            if department:
-                item['department'] = ' '.join([department.strip() for department in department])
+        sel = Selector(response)
 
-            # item['institution'] = 'University of Virginia'
-            # item['division'] = 'School of Nursing'
+        name = sel.xpath('//div[@id="alpha"]/h1/text()').extract() + \
+            sel.xpath('//h1[@class="page-title"]/text()').extract()
 
-            email = socio_sel.xpath('//div[@class="mContact"]/p/a/text()').extract()
-            if email:
-                item['email'] = email
+        if name:
+            bii['name'] = ' '.join([name.strip() for name in name])
 
-            phone = socio_sel.xpath('//div[@class="mContact"]/p/text()').extract()
-            if phone:
-                item['phone'] = ' '.join([phone.strip() for phone in phone])
+        title = sel.xpath('//div[@id="alpha"]/p/strong/text()').extract()
+        if title:
+            bii['title'] = ' '.join([title.strip() for title in title])
 
-            url = socio_sel.xpath('//p[@class="mName"]/a/@href').extract()
-            if url:
-                item['url'] = ' '.join([url.strip() for url in url])
-            return item
+        bii['department'] = 'American Study'
+        bii['institution'] = 'Notre Dame'
+
+        email = sel.xpath('//div[@id="alpha"]/p/a/text()').extract()
+        if email:
+            bii['email'] = email[0].strip()
+
+        phone = sel.xpath('//div[@id="alpha"]/p[7]/text()').extract()
+        assert isinstance(phone, object)
+        if phone:
+            bii['phone'] = ''.join(phone for phone in phone if phone.isdigit())
+        return bii
+
+"""
+The department of American Studies has the following information too:
+profile, Courses, BooksArticls & chapters and awards
+
+"""
+
+
