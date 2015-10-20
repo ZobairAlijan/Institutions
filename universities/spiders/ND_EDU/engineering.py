@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import scrapy
-import os
 from universities.items import University
 
 
@@ -37,4 +36,4 @@ class EngineeringSpider(scrapy.Spider):
             phone=response.xpath('//div[@class="contact-info"]/p[2]').re(r'</strong>(.*)<br>')[0])
 
         result['institution'] = 'Notre Dame'
-        yield University(**result)
+        return result

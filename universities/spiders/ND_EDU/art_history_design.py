@@ -53,7 +53,7 @@ class ArtHistoryDesignSpider(scrapy.Spider):
             history_design['title'] = ' '.join([x.strip() for x in title[0].split('\r\n') if x.strip()])
 
         history_design['department'] = 'Art, History and Design'
-        history_design['division'] = 'ACollege of Arts and Letters'
+        history_design['division'] = 'College of Arts and Letters'
         history_design['institution'] = 'Virginia Tech'
 
         phone = sel.xpath('//h2[contains(text(), "Contact")]/following-sibling::p/text()').extract()[2]
