@@ -50,6 +50,6 @@ class BarclayEduSpider(scrapy.Spider):
             if email:
                 item['email'] = ' '.join([x.strip() for x in email])
 
-            return item
+            return University(**item)
 
 

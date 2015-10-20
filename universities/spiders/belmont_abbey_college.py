@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import scrapy
-from scrapy.http import Request
 from scrapy.selector import Selector
 
-from universities.items import University
+from universities.items import BethanyEdu
 
 
 class BelmontAbbeyEduSpider(scrapy.Spider):
@@ -26,10 +25,10 @@ class BelmontAbbeyEduSpider(scrapy.Spider):
 
         """
         sel = Selector(response)
-        people_sel = sel.xpath('//table[@id="tablepress-15"]/tbody/tr')
+        people_sel = sel.xpath('//table[@id="tablepress-15"]')
 
         for belmont_sel in people_sel:
-            item = University()
+            item = BethanyEdu()
 
             last_name = belmont_sel.xpath('//tbody[@class="row-hover"]/tr/td[1]/text()').extract()
             if last_name:

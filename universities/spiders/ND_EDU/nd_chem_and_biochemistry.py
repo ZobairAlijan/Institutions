@@ -10,7 +10,7 @@ from universities.items import University
 class BioChemistrySpider(scrapy.Spider):
     """
     Scrape all faculty members profiles from
-    http://www.romance.nd.edu
+    http://www.chemistry.nd.edu
 
     """
     name = "nd_chemistry"
@@ -26,10 +26,10 @@ class BioChemistrySpider(scrapy.Spider):
         """
         selection = Selector(response)
 
-        design_links = selection.xpath('//ul[@class="faculty-list"]/li/h3/a/@href').extract()
-        for this_link in design_links:
-            p_link = 'http://www.chemistry.nd.edu%s' % this_link
-            request = Request(p_link,
+        bio_chem_links = selection.xpath('//ul[@class="faculty-list"]/li/h3/a/@href').extract()
+        for that_link in bio_chem_links:
+            ch_link = 'http://www.chemistry.nd.edu%s' % that_link
+            request = Request(ch_link,
                               callback=self.parse_chemistry)
             print request
             yield request
@@ -65,11 +65,11 @@ class BioChemistrySpider(scrapy.Spider):
         email = sel.xpath('//div//a[contains(@href,"mailto:")]/@href').extract()
         if email:
             history_design['email'] = ' '.join([email.strip() for email in email])
-        yield University(**history_design)
+        return University(**history_design)
 
 """
-The department of Art Design in Notre Dame also has the following information for faculty members
+The department of Chemsitry and Biochemistry in Notre Dame also has the following information for faculty members
 
-Degree and Bio
+Bio, selected awards, research interests, research specialties, recenet papers, gallery
 
 """

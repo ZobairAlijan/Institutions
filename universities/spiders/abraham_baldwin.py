@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import scrapy
-from scrapy.http import Request
 from scrapy.selector import Selector
 
 from universities.items import University
@@ -44,7 +43,7 @@ class AbrahamBaldwinEduSpider(scrapy.Spider):
 
             ab['institution'] = 'Abraham Baldwin College'
 
-            email = faculty_sel.xpath('//tr[@class="degree"]/td/p/text()').extract()
+            email = faculty_sel.xpath('//table[@class="directory table table-bordered"]//tr/td[4]/a/text()').extract_first()[0]
             if email:
                 ab['email'] = email
 

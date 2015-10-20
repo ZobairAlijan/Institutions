@@ -31,20 +31,20 @@ class BethanyLutheranSpider(scrapy.Spider):
 
             name = profile_sel.xpath('//table[@class="directory table table-bordered"]//tr/td/a/b/text()').extract()
             if name:
-                bacone['name'] = name
+                bacone['name'] = ' '.join([name.strip() for name in name])
 
-            title = profile_sel.xpathsel.xpath('//table[@class="directory table table-bordered"]//tr//td[2]/text()').extract()
+            title = profile_sel.xpath('//table[@class="directory table table-bordered"]//tr//td[2]/text()').extract()
             if title:
                 bacone['title'] = ' '.join([title.strip() for title in title])
 
             bacone['institution'] = 'Bacone College'
-            email = profile_sel.xpath('//table[@class="directory table table-bordered"]//tr//td[2]/text()').extract()
+            email = profile_sel.xpath('//table[@class="directory table table-bordered"]//tr/td[2]/a[2]/text()').extract()
             if email:
                 bacone['email'] = email
 
             phone = profile_sel.xpath('//table[@class="directory table table-bordered"]//tr/td/a/text()').extract()
             if phone:
-                bacone['phone'] = phone
+                bacone['phone'] = ' '.join([phone.strip() for phone in phone])
 
             url = profile_sel.xpath('//table[@class="directory table table-bordered"]//tr/td[1]/a[1]/@href').extract()
             if url:

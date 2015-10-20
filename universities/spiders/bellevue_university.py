@@ -56,7 +56,7 @@ class BellevueEduSpider(scrapy.Spider):
         if phone:
             item['phone'] = phone[0].strip()
 
-        url = sel.xpath('//div[@class="col-750 shadow"]/section/ul/li/a/@href').extract()
+        url = sel.xpath('//ul[@class="noBullets"]/li/a/@href').extract()
         if url:
-            item['url'] = phone[0].strip()
+            item['url'] = url
         return item

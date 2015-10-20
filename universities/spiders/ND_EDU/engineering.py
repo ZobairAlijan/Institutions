@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import os
-import time
 from universities.items import University
 
 
@@ -15,7 +14,7 @@ class EngineeringSpider(scrapy.Spider):
     def parse(self, response):
 
         if 'next_page' in response.request.meta:
-            time.sleep(0)
+            pass
 
         for e_url in response.xpath('//div[@class="faceted-results"]//dt/div[@class="memberName"]/a/@href').extract():
             yield scrapy.Request(e_url, meta={}, callback=self.parse_member)
@@ -24,7 +23,6 @@ class EngineeringSpider(scrapy.Spider):
             yield scrapy.Request(e, meta={'next_page': True}, callback=self.parse)
 
     def parse_member(self, response):
-        time.sleep(0)
         result = dict(
             name=' '.join(response.xpath('//h1[@class="documentFirstHeading memberName"]/text()')
                           .extract_first().replace('\n', '').split()),
