@@ -60,7 +60,7 @@ class EconomicsSpider(scrapy.Spider):
 
         phone = sel.xpath('//em[contains(text(), "Phone")]/following-sibling::text()').extract()
         if phone:
-            economics['phone'] = ''.join(phone for phone in phone if phone.isdigit())
+            economics['phone'] = ' '.join([phone.strip() for phone in phone])
 
         email = sel.xpath('//em[contains(text(), "Email")]/following-sibling::a/text()').extract()
         if email:

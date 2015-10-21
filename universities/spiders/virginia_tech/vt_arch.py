@@ -4,7 +4,7 @@ import scrapy
 from scrapy.http import Request
 from scrapy.selector import Selector
 
-from universities.items import BabsonEduItem
+from universities.items import University
 
 
 class ArchEduSpider(scrapy.Spider):
@@ -39,25 +39,25 @@ class ArchEduSpider(scrapy.Spider):
 
         """
 
-        this_arch = BabsonEduItem()
+        this_arch = University()
 
         sel = Selector(response)
 
         name = sel.xpath('//div[@class="faculty-page"]/h2/text()').extract()
         if name:
-            this_arch['name'] = ' '.join([x.strip() for x in name[0].split('\r\n') if x.strip()])
+            this_arch['name'] = name
 
-        title = sel.xpath('//div[@class="faculty-page"]/h3/text()').extract()
-        if title:
-            this_arch['title'] = ' '.join([x.strip() for x in title[0].split('\r\n') if x.strip()])
-
-        this_arch['department'] = 'Architecture and design'
-        this_arch['disvision'] = 'School of Architecture and design'
-        this_arch['institution'] = 'Virginia Teh'
-
-        email = sel.xpath('//div[@class="faculty-page"]/p[5]/text()').extract()
-        if email:
-            this_arch['email'] = email[0].strip()
+        # title = sel.xpath('//div[@class="faculty-page"]/h3/text()').extract()
+        # if title:
+        #     this_arch['title'] = ' '.join([x.strip() for x in title[0].split('\r\n') if x.strip()])
+        #
+        # this_arch['department'] = 'Architecture and design'
+        # this_arch['division'] = 'School of Architecture and design'
+        # this_arch['institution'] = 'Virginia Teh'
+        #
+        # email = sel.xpath('//div[@class="faculty-page"]/p[5]/text()').extract()
+        # if email:
+        #     this_arch['email'] = email[0].strip()
 
         return this_arch
 

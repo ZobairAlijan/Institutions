@@ -8,6 +8,7 @@ from universities.items import University
 
 
 class BabsonEduSpider(scrapy.Spider):
+
     """
     Scrape all profiles from
     http://www.sociology.nd.edu
@@ -21,7 +22,7 @@ class BabsonEduSpider(scrapy.Spider):
 
     def parse(self, response):
         """
-        Get links to profiles
+        Getting links from department of sociology
 
         """
         sel = Selector(response)
@@ -35,36 +36,32 @@ class BabsonEduSpider(scrapy.Spider):
 
     def parse_profile_page(self, response):
         """
-        Parse profile page
+        Parse faculty member profile
 
         """
 
-        bii = University()
+        socio = University()
 
         sel = Selector(response)
 
-        name = sel.xpath('//div[@class="column in"]/h1/text()').extract()
+        name = sel.xpath('//h1[@class="page-title"]/text()').extract()
         if name:
-            bii['name'] = name
+            socio['name'] = ' '.join([x.strip() for x in name[0].split('\r\n') if x.strip()])
 
-        # title = sel.xpath('//div[@class="responsive-profile__bio responsive-profile__main-col"]/h2/text()').extract()
-        # if title:
-        #     bii['title'] = ' '.join([x.strip() for x in title[0].split('\r\n') if x.strip()])
-        #
-        # department = sel.xpath('//span[contains(text(), "Academic Division")]/following-sibling::div/a/text()').extract()
-        # if department:
-        #     bii['department'] = department[0]
-        #
-        # bii['institution'] = 'Babson College'
-        #
-        # email = sel.xpath('//span[contains(text(), "Contact")]/following-sibling::div/a/text()').extract()
-        # if email:
-        #     bii['email'] = email[0].strip()
-        #
-        # phone = sel.xpath('//span[contains(text(), "Contact")]/following-sibling::div/text()').extract()
-        # if phone:
-        #     bii['phone'] = phone[0].strip()
+        title = sel.xpath('//div[@class="column in"]//p/text()').extract()
+        if title:
+            socio['title'] = ' '.join([x.strip() for x in title[0].split('\r\n') if x.strip()])
 
-        return bii
+        socio['institution'] = 'Notre Dame'
+        socio['department'] = 'Sociology'
+
+        email = sel.xpath('//div[@class="column in"]//p/a/text()').extract()
+        if email:
+            socio['email'] = email[0].strip()
+
+        phone = sel.xpath('//div[@class="column in"]//p/text()').extract()
+        if phone:
+            socio['title'] = ' '.join([phone.strip() for phone in phone.isdigit()])
+        return socio
 
 

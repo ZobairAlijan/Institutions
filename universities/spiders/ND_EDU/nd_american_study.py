@@ -67,7 +67,7 @@ class BabsonEduSpider(scrapy.Spider):
 
 """
 The department of American Studies has the following information too:
-profile, Courses, BooksArticls & chapters and awards
+profile, Courses, Books Articls & chapters and awards
 
 """
 

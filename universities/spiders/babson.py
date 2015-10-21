@@ -22,7 +22,7 @@ class BabsonEduSpider(scrapy.Spider):
     def parse(self, response):
         """
         Get links to profiles
-        
+
         """
         sel = Selector(response)
 
@@ -33,15 +33,15 @@ class BabsonEduSpider(scrapy.Spider):
                 callback=self.parse_profile_page)
             yield request
 
-    
+
     def parse_profile_page(self, response):
         """
         Parse profile page
-        
+
         """
-        
+
         bii = University()
-        
+
         sel = Selector(response)
 
         name = sel.xpath('//div[@class="responsive-profile__bio responsive-profile__main-col"]/h1/text()').extract()
@@ -65,7 +65,7 @@ class BabsonEduSpider(scrapy.Spider):
         phone = sel.xpath('//span[contains(text(), "Contact")]/following-sibling::div/text()').extract()
         if phone:
             bii['phone'] = phone[0].strip()
-        
+
         return bii
 
 

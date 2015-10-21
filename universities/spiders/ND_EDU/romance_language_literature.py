@@ -36,7 +36,7 @@ class RomancelitSpider(scrapy.Spider):
 
     def parse_romance_lit(self, response):
         """
-        Parse profile page
+        Parse faculty members profile
 
         """
 
@@ -62,7 +62,7 @@ class RomancelitSpider(scrapy.Spider):
 
         email = sel.xpath('//h3[contains(text(), "Contact Information")]/following-sibling::p/a/text()').extract()
         if email:
-            romance_lit['email'] = email[0].strip()
+            romance_lit['email'] = email[0].strip
         return romance_lit
 
 """

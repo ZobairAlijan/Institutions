@@ -58,13 +58,13 @@ class PoliticalScienceSpider(scrapy.Spider):
         history_design['division'] = 'College of Arts and Letters'
         history_design['institution'] = 'Notre Dame'
 
-        phone = sel.xpath('//p[contains(text(), "Phone:")]/following-sibling::text()').extract()
+        phone = sel.xpath('//strong[contains(text(), "Phone:")]/following-sibling::text()').extract()
         if phone:
-            history_design['phone'] = ''.join(phone for phone in phone if phone.isdigit())
+            history_design['phone'] = ' '.join([phone.strip() for phone in phone])
 
-        email = sel.xpath('//p[contains(text(), "Email:")]/following-sibling::a/text()').extract()
+        email = sel.xpath('//strong[contains(text(), "Email:")]/following-sibling::a/text()').extract()
         if email:
-            history_design['email'] = email[0].strip()
+            history_design['email'] = ' '.join([email.strip() for email in email])
         return history_design
 
 """

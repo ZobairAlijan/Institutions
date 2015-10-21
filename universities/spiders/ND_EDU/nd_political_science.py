@@ -40,30 +40,30 @@ class PoliticalScienceSpider(scrapy.Spider):
 
         """
 
-        history_design = University()
+        political_design = University()
 
         sel = Selector(response)
 
         name = sel.xpath('//div[@id="content"]/h1/text()').extract()
         if name:
-            history_design['name'] = ' '.join([x.strip() for x in name[0].split('\r\n') if x.strip()])
+            political_design['name'] = ' '.join([x.strip() for x in name[0].split('\r\n') if x.strip()])
 
         title = sel.xpath('//div[@id="content"]/text()').extract()
         if title:
-            history_design['title'] = ' '.join([title.strip() for title in title])
+            political_design['title'] = ' '.join([title.strip() for title in title])
 
-        history_design['department'] = 'Political Science'
-        history_design['division'] = 'College of Arts and Letters'
-        history_design['institution'] = 'Notre Dame'
+        political_design['department'] = 'Political Science'
+        political_design['division'] = 'College of Arts and Letters'
+        political_design['institution'] = 'Notre Dame'
 
-        phone = sel.xpath('//p[contains(text(), "Phone:")]/following-sibling::strong/text()').extract()
+        phone = sel.xpath('//strong[contains(text(), "Phone:")]/following-sibling::text()').extract()
         if phone:
-            history_design['phone'] = ''.join(phone for phone in phone if phone.isdigit())
+            political_design['phone'] = ' '.join([x.strip() for x in phone[0].split('\r\n') if x.strip()])
 
-        email = sel.xpath('//p[contains(text(), "Email:")]/following-sibling::strong/a/text()').extract()
+        email = sel.xpath('//strong[contains(text(), "Email:")]/following-sibling::a/text()').extract()
         if email:
-            history_design['email'] = email[0].strip()
-        return history_design
+            political_design['email'] = email[0].strip()
+        return political_design
 
 """
 The department of Art Design in Notre Dame also has the following information for faculty members
