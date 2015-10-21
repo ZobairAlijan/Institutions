@@ -21,31 +21,47 @@ class CulturalSpider(scrapy.Spider):
 
     def parse(self, response):
         """
-        Parse profiles page from department of Agriculture, Leadership, and Community education
+        Getting links from department of Aerospace and Ocean Engineering
 
         """
         sel = Selector(response)
-        people_sel = sel.xpath('//div[@class="col-lg-9"]')
 
-        for agriculture_sel in people_sel:
-            item = University()
+        links = sel.xpath('//div[@class="col-lg-9"]//tr/td[1]/a/@href').extract()
+        for link in links:
+            p_link = 'http://www.alce.vt.edu%s' %link
+            request = Request(p_link,
+                              callback=self.parse_aerospace_and_ocean_engineering)
+            assert isinstance(request, object)
+            print request
+            yield request
 
-            name = agriculture_sel.xpath('//table[@width="100%"]//tr/td/a/text()').extract()
-            if name:
-                item['name'] = name
+    def parse_aerospace_and_ocean_engineering(self, response):
+        """
+        Parse profiles page from department of Agriculture, Leadership, and Community education
+        :param response:
+        :return:
+        """
+        item = University()
 
-            title = agriculture_sel.xpath('//table[@width="100%"]//tr/td[2]/text()').extract()
-            if title:
-                item['title'] = title
-            item['department'] = 'Agriculture, Leadership, and Community education'
-            item['division'] = 'College of Agriculture and Life Sciences'
-            item['institution'] = 'Virginia Tech'
+        agriculture_sel = Selector(response)
 
-            email = agriculture_sel.xpath('//table[@width="100%"]//tr/td[4]/text()').extract()
-            if email:
-                item['email'] = email
+        name = agriculture_sel.xpath('//div[@id="vt_bio_top"]/h2/text()').extract()
+        if name:
+            item['name'] = ' '.join([x.strip() for x in name[0].split('\r\n') if x.strip()])
 
-            phone = agriculture_sel.xpath('//table[@width="100%"]//tr/td[5]/a/text()').extract()
-            if phone:
-                item['phone'] = phone
-            yield item
+        title = agriculture_sel.xpath('//div[@id="vt_bio_top"]/h3/text()').extract()
+        if title:
+            item['title'] = ' '.join([x.strip() for x in title[0].split('\r\n') if x.strip()])
+
+        item['department'] = 'Agriculture, Leadership, and Community education'
+        item['division'] = 'College of Agriculture and Life Sciences'
+        item['institution'] = 'Virginia Tech'
+
+        email = agriculture_sel.xpath('//li[@class="vt_cl_email"]/a/text()').extract()
+        if email:
+            item['email'] = ' '.join([x.strip() for x in email[0].split('\r\n') if x.strip()])
+
+        phone = agriculture_sel.xpath('//li[@class="vt_cl_phone"]/text()').extract()
+        if phone:
+            item['phone'] = ' '.join([x.strip() for x in phone[0].split('\r\n') if x.strip()])
+        return item

@@ -21,50 +21,48 @@ class BiochemistrySpider(scrapy.Spider):
 
     def parse(self, response):
         """
-        Get links to profiles
+        Get links from department of Biochemistry
 
         """
         sel = Selector(response)
 
-        links =  sel.xpath('//div[@class="col-lg-9"]//tr/td/a[1]/@href').extract()
+        links = sel.xpath('//div[@class="col-lg-9"]//tr/td/a[1]/@href').extract()
         for link in links:
-            p_link = 'http://www.biochem.vt.edu%s' %link
+            p_link = 'http://www.biochem.vt.edu%s' % link
             request = Request(p_link,
-                callback=self.parse_profile_page)
+                              callback=self.parse_biochem_page)
             yield request
 
-    def parse_profile_page(self, response):
+    def parse_biochem_page(self, response):
         """
-        Parse profile page
+        Parse faculty members profile from biochemistry department
 
         """
 
         item = University()
-
         sel = Selector(response)
 
         name = sel.xpath('//div[@id="vt_bio_top"]/h2/text()').extract()
         if name:
-            item['name'] = name
+            item['name'] = ' '.join([x.strip() for x in name[0].split('\r\n') if x.strip()])
 
         title = sel.xpath('//div[@id="vt_bio_top"]/h3/text()').extract()
         if title:
-            item['title'] = title
+            item['title'] = ' '.join([x.strip() for x in title[0].split('\r\n') if x.strip()])
 
         department = sel.xpath('//li[@class="vt_cl_address"]/text()').extract()
         if department:
-            item['department'] = department
+            item['department'] = department[0]
 
         item['institution'] = 'Virginia Tech'
         item['division'] = 'College of Agriculture and Life Sciences'
 
         email = sel.xpath('//li[@class="vt_cl_email"]/a/text()').extract()
         if email:
-            item['title'] = email
+            item['email'] = ' '.join([x.strip() for x in email[0].split('\r\n') if x.strip()])
 
         phone = sel.xpath('//li[@class="vt_cl_phone"]/text()').extract() + \
             sel.xpath('//li[2][@class="vt_cl_phone"]/text()').extract()
-
         if phone:
-            item['title'] = phone
+            item['phone'] = ' '.join([x.strip() for x in phone[0].split('\r\n') if x.strip()])
         return item

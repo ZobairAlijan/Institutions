@@ -7,13 +7,13 @@ from scrapy.selector import Selector
 from universities.items import University
 
 
-class BiologicalSystemsSpider(scrapy.Spider):
+class ChemicalEngineeringSpider(scrapy.Spider):
     """
     Scrape all faculty members profiles from
     http://www.bse.vt.edu website
 
     """
-    name = "bi"
+    name = "chemeng"
     allowed_domains = ["che.vt.edu"]
     start_urls = (
         'http://www.che.vt.edu/people_faculty.php',
@@ -28,7 +28,7 @@ class BiologicalSystemsSpider(scrapy.Spider):
 
         links = sel.xpath('//ul[@class="facultylist"]/li/h2/a/@href').extract()
         for link in links:
-            p_link = 'http://www.che.vt.edu%s' %link
+            p_link = 'http://www.che.vt.edu%s' % link
             request = Request(p_link, callback=self.max_parse)
             yield request
 
@@ -39,12 +39,11 @@ class BiologicalSystemsSpider(scrapy.Spider):
         """
 
         item = University()
-
         sel = Selector(response)
 
         name = sel.xpath('//li[@class="facultymember indentmore"]/h2/text()').extract()
         if name:
-            item['name'] = ' '.join([x.strip() for x in name[0].split('\r\n') if x.strip()])
+            item['name'] = name
 
         title = sel.xpath('//span[@class="title"]/text()').extract()
         if title:
@@ -58,10 +57,10 @@ class BiologicalSystemsSpider(scrapy.Spider):
         if email:
             item['email'] = email[0].strip()
 
-        phone = sel.xpath('//h4[contains(text(), "Contact")]/following-sibling::ul/li/text()').extract()
+        phone = sel.xpath('//h4[contains(text(), "Contact:")]/following-sibling::ul/li/text()').extract()
         if phone:
             item['phone'] = phone[0].strip()
         url = sel.xpath('//li[@class="facultymember indentmore"]/h2/@href').extract()
         if url:
-            item['url'] = phone[0].strip()
+            item['url'] = url
         return item

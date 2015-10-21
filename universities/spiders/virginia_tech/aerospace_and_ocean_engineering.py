@@ -7,13 +7,13 @@ from scrapy.selector import Selector
 from universities.items import University
 
 
-class BabsonEduSpider(scrapy.Spider):
+class AeroSpaceSpider(scrapy.Spider):
     """
     Scrape all faculty members profiles from
     http://www.aoe.vt.edu website
 
     """
-    name = "tek"
+    name = "aerospace"
     allowed_domains = ["aoe.vt.edu"]
     start_urls = (
         'http://www.aoe.vt.edu/people/faculty/index.html',
@@ -25,7 +25,7 @@ class BabsonEduSpider(scrapy.Spider):
 
     def parse(self, response):
         """
-        Get links to profiles
+        Getting links from department of Aerospace and Ocean Engineering
 
         """
         sel = Selector(response)
@@ -34,12 +34,13 @@ class BabsonEduSpider(scrapy.Spider):
         for link in links:
             p_link = 'http://www.aoe.vt.edu%s' %link
             request = Request(p_link,
-                              callback=self.parse_profile_page)
+                              callback=self.parse_aerospace_and_ocean_engineering)
+            assert isinstance(request, object)
             yield request
 
-    def parse_profile_page(self, response):
+    def parse_aerospace_and_ocean_engineering(self, response):
         """
-        Parse profile page
+        Parse faculty members profile from department of Aerospace and Ocean Engineering
 
         """
 
@@ -55,6 +56,7 @@ class BabsonEduSpider(scrapy.Spider):
         if title:
             item['title'] = ' '.join([x.strip() for x in title[0].split('\r\n') if x.strip()])
 
+        item['institution'] = 'Aerospace and Ocean Engineering'
         item['institution'] = 'Virginia Tech'
         item['division'] = 'College of Engineering'
 

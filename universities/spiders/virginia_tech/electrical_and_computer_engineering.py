@@ -7,10 +7,10 @@ from scrapy.selector import Selector
 from universities.items import University
 
 
-class BabsonEduSpider(scrapy.Spider):
+class ElectricalEngineeringSpider(scrapy.Spider):
     """
     Scrape all profiles from
-    http://www.babson.edu
+    http://www.enge.vt.edu
 
     """
     name = "ece"
@@ -21,22 +21,21 @@ class BabsonEduSpider(scrapy.Spider):
 
     def parse(self, response):
         """
-        Get links to profiles
+        Get links from department of  electrical and Computer Engineering
 
         """
-        
         sel = Selector(response)
 
         links = sel.xpath('//form[@id="adminForm"]/div/p/a/@href').extract()
         for link in links:
-            p_link = 'http://www.enge.vt.edu%s' %link
-            request = Request(p_link,
-                              callback=self.parse_max_the_best)
+            pc_link = 'http://www.enge.vt.edu%s' % link
+            request = Request(pc_link,
+                              callback=self.parse_computer_engineering)
             yield request
 
-    def parse_max_the_best(self, response):
+    def parse_computer_engineering(self, response):
         """
-        Parse profile page
+        Parse faculty members profile from the department of electrical and Computer Engineering
 
         :rtype : object
         """
@@ -65,7 +64,7 @@ class BabsonEduSpider(scrapy.Spider):
         if email:
             item['email'] = email[0].strip()
 
-        url = sel.xpath('//div[@class="adminForm"]/div[1]/p/a/@href').extract()
+        url = sel.xpath('//form[@id="adminForm"]/div/p/a/@href').extract()
         if url:
             item['url'] = url
 

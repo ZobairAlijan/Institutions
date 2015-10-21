@@ -22,26 +22,25 @@ class BiologicalSpider(scrapy.Spider):
 
     def parse(self, response):
         """
-        Get links to profiles
+        Get links from department of biological System Engineering
 
         """
         sel = Selector(response)
 
         links =  sel.xpath('//div[@class="col-lg-9"]//tr/td/a[1]/@href').extract()
         for link in links:
-            p_link = 'http://www.bse.vt.edu%s' %link
+            p_link = 'http://www.bse.vt.edu%s' % link
             request = Request(p_link,
-                callback=self.parse_profile_page)
+                              callback=self.parse_biological_page)
             yield request
 
-    def parse_profile_page(self, response):
+    def parse_biological_page(self, response):
         """
-        Parse profile page
+        Parse faculty members profile from department of biological System Engineering
 
         """
 
         item = University()
-
         sel = Selector(response)
 
         name = sel.xpath('//div[@id="vt_bio_top"]/h2/text()').extract()

@@ -7,7 +7,7 @@ from scrapy.selector import Selector
 from universities.items import University
 
 
-class CulturalSpider(scrapy.Spider):
+class CropSoilSpider(scrapy.Spider):
     """
     Scrape all faculty members profiles from
     http://www.cses.vt.edu
@@ -21,32 +21,46 @@ class CulturalSpider(scrapy.Spider):
 
     def parse(self, response):
         """
-        Parse profiles page from department of Crop, Soil, and Environmental Science
+        Getting links from department of Animal Poultry Sciences
 
         """
         sel = Selector(response)
-        people_sel = sel.xpath('//div[@class="col-lg-9"]')
 
-        for agriculture_sel in people_sel:
-            item = University()
+        links = sel.xpath('//div[@class="col-lg-9"]//tr/td[1]/a/@href').extract()
+        for link in links:
+            p_link = 'http://www.cses.vt.edu%s' % link
+            request = Request(p_link,
+                              callback=self.parse_crop_soil)
+            assert isinstance(request, object)
+            print request
+            yield request
 
-            name = agriculture_sel.xpath('//td[@style=" width: 195px;"]/a/text()').extract()
-            if name:
-                item['name'] = name
+    def parse_crop_soil(self, response):
+        """
+        Parse faculty members profile from the department of  Crop, Soil, and Environmental Science
 
-            title = agriculture_sel.xpath('//td[@style=" width: 138px;"]/text()').extract()
-            if title:
-                item['title'] = title
-            item['department'] = 'Crop, Soil, and Environmental Science'
-            item['division'] = 'College of Agriculture and Life Sciences'
-            item['institution'] = 'Virginia Tech'
+        """
+        soil_sel = Selector(response)
 
-            email = agriculture_sel.xpath('//td[@style =" width: 163px;"]/a/text()').extract()
-            if email:
-                item['email'] = email
+        item = University()
 
-            phone = agriculture_sel.xpath('//td[@style =" width: 117px;"]/text()').extract()
-            if phone:
-                item['phone'] = phone
+        name = soil_sel.xpath('//div[@id="vt_bio_top"]/h2/text()').extract()
+        if name:
+            item['name'] = ' '.join([this.strip() for this in name[0].split('\r\n') if this.strip()])
 
-            yield item
+        title = soil_sel.xpath('//div[@id="vt_bio_top"]/h3/text()').extract()
+        if title:
+            item['title'] = ' '.join([this.strip() for this in title[0].split('\r\n') if this.strip()])
+        item['department'] = 'Crop, Soil, and Environmental Science'
+        item['division'] = 'College of Agriculture and Life Sciences'
+        item['institution'] = 'Virginia Tech'
+
+        email = soil_sel.xpath('//li[@class="vt_cl_email"]/a/text()').extract()
+        if email:
+            item['email'] = ' '.join([this.strip() for this in email[0].split('\r\n') if this.strip()])
+
+        phone = soil_sel.xpath('//li[@class="vt_cl_phone"]/text()').extract()
+        if phone:
+            item['phone'] = ' '.join([x.strip() for x in phone[0].split('\r\n') if x.strip()])
+
+        return University(item)

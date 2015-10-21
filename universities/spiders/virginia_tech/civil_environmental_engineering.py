@@ -28,7 +28,7 @@ class BiologicalSystemsSpider(scrapy.Spider):
 
         links = sel.xpath('//table[@class="iframetable"]//tr[2]/td[3]/a/@href').extract()
         for link in links:
-            p_link = 'http://www.bse.vt.edu%s' %link
+            p_link = 'http://www.cee.vt.edu.edu%s' %link
             request = Request(p_link, callback=self.max_parse)
             yield request
 
