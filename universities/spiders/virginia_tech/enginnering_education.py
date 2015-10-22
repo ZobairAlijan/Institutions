@@ -14,7 +14,9 @@ class EngEducationSpider(scrapy.Spider):
 
     """
     name = "engineering_education"
-    allowed_domains = ["enge.vt.edu"]
+    allowed_domains = [
+        "enge.vt.edu",
+    ]
     start_urls = (
         'http://www.enge.vt.edu/people/teaching-research-faculty.html',
     )
@@ -28,8 +30,8 @@ class EngEducationSpider(scrapy.Spider):
 
         educational_links = params.xpath('//div[@class="contact-category"]//p/a/@href').extract()
         for eng_education_link in educational_links:
-            engineering_link = 'http://www.enge.vt.edu%s' % eng_education_link
-            request = Request(engineering_link,
+            engineering_education_link = 'http://www.enge.vt.edu%s' % eng_education_link
+            request = Request(engineering_education_link,
                               callback=self.parse_engineering_education)
             print request
             yield request
@@ -70,3 +72,9 @@ class EngEducationSpider(scrapy.Spider):
 
         print eng_education
         return eng_education
+
+"""
+department of Engineering education also has the following
+
+Stuff, Researchers, and students
+"""

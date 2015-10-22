@@ -14,7 +14,9 @@ class DairySpider(scrapy.Spider):
 
     """
     name = "horticulture"
-    allowed_domains = ["hnfe.vt.edu"]
+    allowed_domains = [
+        "hnfe.vt.edu",
+    ]
     start_urls = (
         'http://www.hnfe.vt.edu/People/faculty/index.html',
     )
@@ -27,13 +29,13 @@ class DairySpider(scrapy.Spider):
         sel = Selector(response)
 
         links = sel.xpath('//div[@class="col-lg-9"]//tr/td[2]/a[1]/@href').extract()
-        for link in links:
-            p_link = 'http://www.hnfe.vt.edu%s' %link
+        for hort_link in links:
+            p_link = 'http://www.hnfe.vt.edu%s' % hort_link
             request = Request(p_link,
-                              callback=self.parse_profile_page)
+                              callback=self.parse_hort_culture_page)
             yield request
 
-    def parse_profile_page(self, response):
+    def parse_hort_culture_page(self, response):
         """
         Parse profiles page from department of Human Nutrition, Foods, and Exercise
 

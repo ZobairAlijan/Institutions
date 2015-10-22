@@ -7,13 +7,13 @@ from scrapy.selector import Selector
 
 from universities.items import University
 
-class BabsonEduSpider(scrapy.Spider):
+class MiningSpider(scrapy.Spider):
     """
-    Scrape all profiles from
-    http://www.babson.edu
+    Scrape all faculty members profiles from
+    http://www.mlsoc.vt.edu
 
     """
-    name = "test"
+    name = "mining"
     allowed_domains = ["mlsoc.vt.edu"]
     start_urls = (
         'http://www.mlsoc.vt.edu/directory/faculty-staff',
@@ -28,12 +28,13 @@ class BabsonEduSpider(scrapy.Spider):
 
         links = sel.xpath('//div[@class="view-content"]//div/h3/a/@href').extract()
         for link in links:
-            p_link = 'http://www.mlsoc.vt.edu%s' %link
-            request = Request(p_link,
-                              callback=self.parse_profile_page)
+            mining_link = 'http://www.mlsoc.vt.edu%s' % link
+            request = Request(mining_link,
+                              callback=self.parse_mining_page
+                              )
             yield request
 
-    def parse_profile_page(self, response):
+    def parse_mining_page(self, response):
         """
         Parse profile page
 
@@ -43,7 +44,7 @@ class BabsonEduSpider(scrapy.Spider):
 
         sel = Selector(response)
 
-        name = sel.xpath('//div[@class="field-item even"]/text()').extract()
+        name = sel.xpath('//div[@class="field field-name-field-profile-listname field-type-text field-label-hidden"]//div/text()').extract()
         if name:
             bii['name'] = name
 

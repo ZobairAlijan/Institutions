@@ -21,7 +21,7 @@ class EntomologSpider(scrapy.Spider):
 
     def parse(self, response):
         """
-        Get links to profiles
+        Get links from entomology department
 
         """
         sel = Selector(response)
@@ -29,18 +29,15 @@ class EntomologSpider(scrapy.Spider):
         links =  sel.xpath('//div[@class="col-lg-9"]//tr/td[2]/a[1]/@href').extract()
         for link in links:
             p_link = 'http://www.ento.vt.edu%s' %link
-            request = Request(p_link,
-                callback=self.parse_profile_page)
+            request = Request(p_link, callback=self.parse_entomology_page)
             yield request
 
-    def parse_profile_page(self, response):
+    def parse_entomology_page(self, response):
         """
         Parse profile page
 
         """
-
         item = University()
-
         sel = Selector(response)
 
         name = sel.xpath('//div[@id="vt_bio_top"]/h2/text()').extract()
