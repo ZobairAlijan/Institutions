@@ -14,9 +14,10 @@ class MiningSpider(scrapy.Spider):
 
     """
     name = "mining"
-    allowed_domains = ["mlsoc.vt.edu"]
+    allowed_domains = ["vt.edu"]
     start_urls = (
         'http://www.mlsoc.vt.edu/directory/faculty-staff',
+
     )
 
     def parse(self, response):
@@ -41,10 +42,9 @@ class MiningSpider(scrapy.Spider):
         """
 
         bii = University()
-
         sel = Selector(response)
 
-        name = sel.xpath('//div[@class="field field-name-field-profile-listname field-type-text field-label-hidden"]//div/text()').extract()
+        name = sel.xpath('//div[@id="profile2-faculty-full-group-left"]/div[2]/div/div/text()').extract()
         if name:
             bii['name'] = name
 
@@ -65,7 +65,7 @@ class MiningSpider(scrapy.Spider):
         # phone = sel.xpath('//span[contains(text(), "Contact")]/following-sibling::div/text()').extract()
         # if phone:
         #     bii['phone'] = phone[0].strip()
-
-        return bii
+        yield  bii
+        # return bii
 
 

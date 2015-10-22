@@ -22,7 +22,7 @@ class BellarmineEduSpider(scrapy.Spider):
     def parse(self, response):
         """
         All faculty information is in one plains text i.e name, title, department, division, phone, therefore
-        it is not pssoble to group them seperatly.
+        it is not possible to group them seperatly.
 
         """
         sel = Selector(response)

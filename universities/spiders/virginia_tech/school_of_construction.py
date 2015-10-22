@@ -7,13 +7,13 @@ from scrapy.selector import Selector
 from universities.items import BabsonEduItem
 
 
-class MendozaNdEduSpider(scrapy.Spider):
+class ConstructionSpider(scrapy.Spider):
     """
     Scrape all profiles from
-    http://www.mendoza.nd.edu
+    http://www.mlsoc.vt.edu
 
     """
-    name = "vay"
+    name = "vt_construction"
     allowed_domains = ["mlsoc.vt.edu"]
     start_urls = (
         'http://www.mlsoc.vt.edu/directory/faculty-staff',
@@ -21,7 +21,7 @@ class MendozaNdEduSpider(scrapy.Spider):
 
     def parse(self, response):
         """
-        Parse profiles page
+        Parse links and faculty members profile from Virginia Tech Construction department
 
         """
         sel = Selector(response)

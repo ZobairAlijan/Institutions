@@ -7,13 +7,13 @@ from scrapy.selector import Selector
 from universities.items import University
 
 
-class BrynMawrSpider(scrapy.Spider):
+class BabsonEduSpider(scrapy.Spider):
     """
     Scrape all profiles from
-    http://www.bucknell.edu
+    http://www.babson.edu
 
     """
-    name = "buck"
+    name = "bucknell"
     allowed_domains = ["bucknell.edu"]
     start_urls = (
         'http://www.bucknell.edu/script/communication/EverythingDirectory/',
@@ -21,32 +21,49 @@ class BrynMawrSpider(scrapy.Spider):
 
     def parse(self, response):
         """
-        Parsing faculty members profiles page from Bucknell College
+        Get links from Bucknelll college
 
         """
         sel = Selector(response)
-        link_sel = sel.xpath('//div[@class="row"]')
 
-        for bism_sel in link_sel:
-            item = University()
+        links = sel.xpath\
+            ('//div[@class="mobile-full tablet-full desktop-full listing everything_listing margin_top_small"]'
+             '//div/h3/a/@href').extract()
+        for link in links:
+            p_link = 'http://www.bucknell.edu%s' % link
+            request = Request(p_link,
+                              callback=self.parse_bucknell_page)
+            yield request
 
-            name = bism_sel.xpath('//article[@class="row item personnel"]/div/h3/a/text()').extract()
-            if name:
-                item['name'] = name
+    def parse_bucknell_page(self, response):
+        """
+        Parse profile page
 
-            title = bism_sel.xpath('//article[@class="row item personnel"]/div[1]/p/text()').extract()
-            if title:
-                item['title'] = title
+        """
+        this_item = University()
+        sel = Selector(response)
 
-            item['institution'] = 'Bucknell University'
+        name = sel.xpath('//table[@id="tblResults"]//tr/td[2]/span/text()').extract()
+        if name:
+            this_item['name'] = ' '.join([name.strip() for name in name])
 
-            email = bism_sel.xpath('//div[@class="mobile-full tablet-5 desktop-4 max-5 contact"]/p/a/text()').extract()
-            if email:
-                item['email'] = email
+        title = sel.xpath('//table[@id="tblResults"]//tr[12]/td[2]/text()').extract()
+        if title:
+            this_item['title'] = ' '.join([title.strip() for title in title])
 
-            phone = bism_sel.xpath('//article[@class="row item personnel"]/div/h3/a/@href').extract()
-            if phone:
-                item['phone'] = ' '.join([phone.strip() for phone in phone])
+        department = sel.xpath('//table[@id="tblResults"]//tr[11]/td[2]/text()').extract()
+        if department:
+            this_item['department'] = department
 
-            return item
+        this_item['institution'] = 'Bucknell College'
+
+        email = sel.xpath('//table[@id="tblResults"]//tr[4]/td[2]/a/text()').extract() + \
+            sel.xpath('//table[@id="tblResults"]//tr[5]/td[2]/a/text()').extract()
+        if email:
+            this_item['email'] = email
+
+        phone = sel.xpath('//table[@id="tblResults"]//tr[6]/td[2]/text()').extract()
+        if phone:
+            this_item['phone'] = ' '.join([phone.strip() for phone in phone])
+        return this_item
 

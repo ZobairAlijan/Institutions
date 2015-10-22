@@ -18,23 +18,6 @@ class BabsonEduItem(scrapy.Item):
     url = scrapy.Field()
 
 
-class Mendoza_college_of_bussiness(scrapy.Item):
-    name = scrapy.Field()
-    title = scrapy.Field()
-    department = scrapy.Field()
-    institution = scrapy.Field()
-    email = scrapy.Field()
-    phone = scrapy.Field()
-
-class Notre_Dame_college(scrapy.Item):
-    name = scrapy.Field()
-    title = scrapy.Field()
-    department = scrapy.Field()
-    division = scrapy.Field()
-    institution = scrapy.Field()
-    email = scrapy.Field()
-    phone = scrapy.Field()
-
 class uva_edu(scrapy.Item):
     name = scrapy.Field()
     title = scrapy.Field()
@@ -45,16 +28,6 @@ class uva_edu(scrapy.Item):
     phone = scrapy.Field()
     url = scrapy.Field()
     discipline = scrapy.Field()
-
-
-class Delta_State(scrapy.Item):
-    name = scrapy.Field()
-    title = scrapy.Field()
-    department = scrapy.Field()
-    institution = scrapy.Field()
-    email = scrapy.Field()
-    phone = scrapy.Field()
-    url = scrapy.Field()
 
 
 class University(scrapy.Item):
@@ -68,15 +41,5 @@ class University(scrapy.Item):
     url = scrapy.Field()
     id = scrapy.Field()
 
-
-class BethanyEdu(scrapy.Item):
-    last_name = scrapy.Field()
-    first_name = scrapy.Field()
-    title = scrapy.Field()
-    department = scrapy.Field()
-    institution = scrapy.Field()
-    email = scrapy.Field()
-    phone = scrapy.Field()
-    url = scrapy.Field()
 
 

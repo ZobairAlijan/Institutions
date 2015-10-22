@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import scrapy
+import re
+from string import digits
 from scrapy.http import Request
 from scrapy.selector import Selector
 
@@ -26,7 +28,7 @@ class BridgeSpider(scrapy.Spider):
         """
         sel = Selector(response)
 
-        links = sel.xpath('//ul[@class="people-list nobullets"]/li/div/div/a/@href').extract()
+        links = sel.xpath('//ul[@class="people-list nobullets"]//div/a/@href').extract()
         for link in links:
             p_link = 'http://www.bridgewater.edu%s' %link
             request = Request(p_link, callback=self.parse_profile_page)
@@ -38,32 +40,33 @@ class BridgeSpider(scrapy.Spider):
 
         """
 
-        bii = University()
+        water_sel = University()
 
         sel = Selector(response)
 
         name = sel.xpath('//section[@class="user-markup content fullwidth no-overlap"]/h1/text()').extract()
         if name:
-            bii['name'] = ' '.join([x.strip() for x in name[0].split('\r\n') if x.strip()])
+            water_sel['name'] = ' '.join([name for name in name if name])
 
         title = sel.xpath('//section[@class="user-markup content fullwidth no-overlap"]/h2/text()').extract()
         if title:
-            bii['title'] = ' '.join([x.strip() for x in title[0].split('\r\n') if x.strip()])
+            water_sel['title'] = ' '.join([title for title in title if title])
 
         department = sel.xpath('//section[@class="user-markup content fullwidth no-overlap"]/h3/a/text()').extract()
         if department:
-            bii['department'] = department[0]
+            water_sel['department'] = department
 
-        bii['institution'] = 'Bridge Water College'
+        water_sel['institution'] = 'Bridge Water College'
 
-        email = sel.xpath('//section[strong(text(), "Email")]/following-sibling::text()').extract()
+        email = sel.xpath('//strong[contains(text(), "Email")]/following-sibling::a/text()').extract() + \
+            sel.xpath('//section[@class="user-markup content fullwidth no-overlap"]/p/a/text()').extract()
         if email:
-            bii['email'] = email[0].strip()
+            water_sel['email'] = email
 
-        phone = sel.xpath('//section[strong(text(), "Phone")]/following-sibling::text()').extract()
+        phone = sel.xpath('//strong[contains(text(), "Phone")]/following-sibling::text()').extract() + \
+            sel.xpath('//section[@class="user-markup content fullwidth no-overlap"]/p/text()').extract()
+
         if phone:
-            bii['phone'] = phone[0].strip()
+            water_sel['phone'] = ''.join(phone for phone in phone if phone.isdigit())
 
-        return bii
-
-
+        return water_sel

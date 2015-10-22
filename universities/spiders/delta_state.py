@@ -4,7 +4,7 @@ import scrapy
 from scrapy.http import Request
 from scrapy.selector import Selector
 
-from universities.items import Delta_State
+from universities.items import University
 
 
 class DeltaEduSpider(scrapy.Spider):
@@ -38,34 +38,34 @@ class DeltaEduSpider(scrapy.Spider):
         sel = Selector(response)
         people_sel = sel.xpath('//table[@class="ecc-contact-table responsive-table"]')
 
-        for profile_sel in people_sel:
-            bii = Delta_State()
+        for delta_sel in people_sel:
+            item = University()
 
-            name = profile_sel.xpath('//tr/td[@data-title="Name"]/a/text()').extract()
+            name = delta_sel.xpath('//tr/td[@data-title="Name"]/a/text()').extract()
             if name:
-                bii['name'] = name
+                item['name'] = ' '.join([name.strip() for name in name])
 
-            department = profile_sel.xpath('//tr/td[@data-title="Department"]/a/text()').extract()
+            department = delta_sel.xpath('//tr/td[@data-title="Department"]/a/text()').extract()
             if department:
-                bii['department'] = department
+                item['department'] = department
 
-            title = profile_sel.xpath('//tr/td[@class="ecc-contact-position"]/a/text()').extract()
+            title = delta_sel.xpath('//tr/td[@class="ecc-contact-position"]/a/text()').extract()
             if title:
-                bii['title'] = title
+                item['title'] = ' '.join([title.strip() for title in title])
 
-            bii['institution'] = 'Delta State University'
+            item['institution'] = 'Delta State University'
 
-            email = profile_sel.xpath('//tr/td[@data-title="Email"]/a/text()').extract()
+            email = delta_sel.xpath('//tr/td[@data-title="Email"]/a/text()').extract()
             if email:
-                bii['email'] = email
-            #
-            phone = profile_sel.xpath('//tr/td[@data-title="Phone"]/a/text()').extract()
-            if phone:
-                bii['phone'] = phone
+                item['email'] = email
 
-            url = profile_sel.xpath('//tr/td[@data-title="Name"]/a/@href').extract()
+            phone = delta_sel.xpath('//tr/td[@data-title="Phone"]/a/text()').extract()
+            if phone:
+                item['phone'] = phone
+
+            url = delta_sel.xpath('//tr/td[@data-title="Name"]/a/@href').extract()
             if url:
-                bii['url'] = url
-            return bii
+                item['url'] = url
+            yield item
 
 

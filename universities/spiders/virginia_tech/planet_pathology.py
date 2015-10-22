@@ -7,16 +7,24 @@ from scrapy.selector import Selector
 from universities.items import University
 
 
-class DairySpider(scrapy.Spider):
+class PlanetPathologySpider(scrapy.Spider):
     """
     Scrape all profiles from
     http://www.hnfe.vt.edu
 
     """
     name = "plant"
-    allowed_domains = ["ppws.vt.edu"]
+    allowed_domains = ["vt.edu"]
     start_urls = (
         'http://www.ppws.vt.edu/people/faculty/index.html',
+        'http://www.arec.vaes.vt.edu/alson-h-smith/people/yoder/yoder-bio.html',
+        'http://www.arec.vaes.vt.edu/tidewater/people/balota/balota-bio.html',
+        'http://www.arec.vaes.vt.edu/hampton-roads/people/derr/derr-bio.html',
+        'http://www.arec.vaes.vt.edu/hampton-roads/people/hong/hong-bio.html',
+        'http://www.arec.vaes.vt.edu/southern-piedmont/people/johnson/johnson-bio.html',
+        'http://www.arec.vaes.vt.edu/tidewater/people/langston/langston-biography.html',
+        'http://www.arec.vaes.vt.edu/tidewater/people/langston/langston-biography.html',
+        'http://www.arec.vaes.vt.edu/eastern-shore/people/rideout/rideout-bio.html',
     )
 
     def parse(self, response):
@@ -28,7 +36,7 @@ class DairySpider(scrapy.Spider):
 
         links = sel.xpath('//div[@class="col-lg-9"]//tr/td[2]/a[1]/@href').extract()
         for link in links:
-            p_link = 'http://www.ppws.vt.edu%s' %link
+            p_link = 'http://www.ppws.vt.edu%s' % link
             request = Request(p_link,
                               callback=self.parse_profile_page)
             yield request
@@ -38,7 +46,6 @@ class DairySpider(scrapy.Spider):
         Parse profiles page from department of Human Nutrition, Foods, and Exercise
 
         """
-
         item = University()
 
         sel = Selector(response)
