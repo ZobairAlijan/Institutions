@@ -20,10 +20,6 @@ class BemidjiStateEduSpider(scrapy.Spider):
     )
 
     def parse(self, response):
-        """
-        Parse profiles page
-
-        """
         sel = Selector(response)
         people_sel = sel.xpath('//table[@class="result-listing"]')
 
@@ -43,8 +39,7 @@ class BemidjiStateEduSpider(scrapy.Spider):
                 bii['department'] = ' '.join([x.strip() for x in department])
 
             bii['institution'] = 'Bemidji State University'
-            #there is an issue with email
-            #needs to be fixed
+
             email = sel.xpath('//div[@class="small-12 columns"]/p[1]').extract()
             if email:
                 bii['email'] = ' '.join([x.strip() for x in email])

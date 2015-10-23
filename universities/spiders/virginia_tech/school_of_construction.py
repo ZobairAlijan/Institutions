@@ -4,7 +4,7 @@ import scrapy
 from scrapy.http import Request
 from scrapy.selector import Selector
 
-from universities.items import BabsonEduItem
+from universities.items import University
 
 
 class ConstructionSpider(scrapy.Spider):
@@ -28,13 +28,15 @@ class ConstructionSpider(scrapy.Spider):
         people_sel = sel.xpath('//div[@class="view-content"]//div')
 
         for profile_sel in people_sel:
-            item = BabsonEduItem()
+            item = University()
 
             name = profile_sel.xpath('//h3[@class="field-content"]/a/text()').extract()
             if name:
                 item['name'] = name
 
-            title = profile_sel.xpath('//div[@class="inside panels-flexible-region-inside panels-flexible-region-profile-center-inside panels-flexible-region-inside-first panels-flexible-region-inside-last"]/em/text()').extract()
+            title = profile_sel.xpath\
+                ('//div[@class="inside panels-flexible-region-inside panels-flexible-region-profile-center-inside '
+                 'panels-flexible-region-inside-first panels-flexible-region-inside-last"]/em/text()').extract()
             if title:
                 item['title'] = title
 
@@ -44,11 +46,17 @@ class ConstructionSpider(scrapy.Spider):
 
             item['institution'] = 'Virginia Tech'
 
-            email = profile_sel.xpath('//div[@class="inside panels-flexible-region-inside panels-flexible-region-profile-center-inside panels-flexible-region-inside-first panels-flexible-region-inside-last"]/div[1]/text()').extract()
+            email = profile_sel.xpath('//div[@class="inside panels-flexible-region-inside '
+                                      'panels-flexible-region-profile-center-inside '
+                                      'panels-flexible-region-inside-first panels-flexible-region-inside-last"]'
+                                      '/div[1]/text()').extract()
             if email:
                 item['email'] = email
 
-            phone = profile_sel.xpath('//div[@class="inside panels-flexible-region-inside panels-flexible-region-profile-center-inside panels-flexible-region-inside-first panels-flexible-region-inside-last"]/div[2]/text()').extract()
+            phone = profile_sel.xpath('//div[@class="inside panels-flexible-region-inside '
+                                      'panels-flexible-region-profile-center-inside '
+                                      'panels-flexible-region-inside-first panels-flexible-region-inside-last"]'
+                                      '/div[2]/text()').extract()
             if phone:
                 item['phone'] = phone
             return item

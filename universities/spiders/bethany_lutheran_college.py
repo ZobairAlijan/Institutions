@@ -10,7 +10,7 @@ from universities.items import University
 class LutheranSpider(scrapy.Spider):
     """
     Scrape all profiles from
-    http://www.bismarckstate.edu
+    http://www.blc.edu.edu
 
     """
     name = "lutheran"
@@ -22,7 +22,7 @@ class LutheranSpider(scrapy.Spider):
 
     def parse(self, response):
         """
-        Parse faculty page
+        Parse faculty members profile
 
         """
         sel = Selector(response)
@@ -47,5 +47,5 @@ class LutheranSpider(scrapy.Spider):
             phone = sel.xpath('//td[@class="views-field views-field-nid"]/text()').extract()
             if phone:
                 item['phone'] = phone
-            return item
+            yield item
 

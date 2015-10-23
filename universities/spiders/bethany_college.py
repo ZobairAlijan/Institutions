@@ -3,7 +3,7 @@
 import scrapy
 from scrapy.selector import Selector
 
-from universities.items import University
+from universities.items import Bethany
 
 
 class BethanyEduSpider(scrapy.Spider):
@@ -38,7 +38,7 @@ class BethanyEduSpider(scrapy.Spider):
         bethany_people_sel = sel.xpath('//div[@id="cn-list-body"]')
 
         for profile_sel in bethany_people_sel:
-            bethany = University()
+            bethany = Bethany()
 
             first_name = profile_sel.xpath('//span[@class="given-name"]/text()').extract()
             if first_name:

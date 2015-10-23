@@ -4,7 +4,7 @@ import scrapy
 from scrapy.http import Request
 from scrapy.selector import Selector
 
-from universities.items import BabsonEduItem
+from universities.items import University
 
 
 class BismarckSpider(scrapy.Spider):
@@ -29,7 +29,7 @@ class BismarckSpider(scrapy.Spider):
         link_sel = sel.xpath('//table[@class="layoutTable"]/tr')
 
         for bism_sel in link_sel:
-            eid_mubarak = BabsonEduItem()
+            eid_mubarak = University()
 
             name = bism_sel.xpath('//td[@class="copyTbold"]/text()').extract()
             if name:

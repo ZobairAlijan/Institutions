@@ -28,11 +28,10 @@ class BabsonEduSpider(scrapy.Spider):
 
         links = sel.xpath('//ul[@id="facultyList"]/li/a/@href').extract()
         for link in links:
-            p_link = 'http://www.babson.edu%s' %link
+            p_link = 'http://www.babson.edu%s' % link
             request = Request(p_link,
-                callback=self.parse_profile_page)
+                              callback=self.parse_profile_page)
             yield request
-
 
     def parse_profile_page(self, response):
         """

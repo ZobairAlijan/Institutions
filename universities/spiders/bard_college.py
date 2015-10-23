@@ -22,7 +22,7 @@ class BardSpider(scrapy.Spider):
 
         links = sel.xpath('//select[@class="acad"]/option').extract()
         for link in links:
-            p_link = 'http://www.bard.edu%s' %link
+            p_link = 'http://www.bard.edu%s' % link
             request = Request(p_link, callback=self.parse_profile_page)
             yield request
 
@@ -31,7 +31,6 @@ class BardSpider(scrapy.Spider):
         Parse profile page
 
         """
-
         item = University()
 
         sel = Selector(response)
@@ -39,5 +38,4 @@ class BardSpider(scrapy.Spider):
         name = sel.xpath('//div[@id="text"]//text()').extract()
         if name:
             item['name'] = name
-
         return item

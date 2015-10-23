@@ -29,7 +29,7 @@ class AbrahamBaldwinEduSpider(scrapy.Spider):
         for faculty_sel in abraham_sel:
             ab = University()
 
-            name = faculty_sel.xpath('//tr[@class="degree"]/td/a/text()').extract()
+            name = faculty_sel.xpath('//tr[@class="degree"]/td[2]/a/text()').extract()
             if name:
                 ab['name'] = ' '.join([name.strip() for name in name])
 
@@ -39,11 +39,13 @@ class AbrahamBaldwinEduSpider(scrapy.Spider):
 
             department = faculty_sel.xpath('//tr[@class="degree"]/td[3]/text()').extract()
             if department:
-                ab['department'] = ' '.join([department.strip() for department in department])
+                ab['department'] = ' '.join([department.strip() for department
+                                             in department])
 
             ab['institution'] = 'Abraham Baldwin College'
 
-            email = faculty_sel.xpath('//table[@class="directory table table-bordered"]//tr/td[4]/a/text()').extract_first()[0]
+            email = faculty_sel.xpath('//table[@class="directory table table-bordered"]'
+                                      '//tr/td[4]/a/text()').extract_first()[0]
             if email:
                 ab['email'] = email
 
@@ -55,5 +57,3 @@ class AbrahamBaldwinEduSpider(scrapy.Spider):
             if url:
                 ab['url'] = url
             return ab
-
-

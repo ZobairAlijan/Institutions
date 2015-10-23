@@ -3,7 +3,7 @@
 import scrapy
 from scrapy.selector import Selector
 
-from universities.items import University
+from universities.items import Bethany
 
 
 class BelmontAbbeyEduSpider(scrapy.Spider):
@@ -25,24 +25,22 @@ class BelmontAbbeyEduSpider(scrapy.Spider):
 
         """
         sel = Selector(response)
-        people_sel = sel.xpath('//table[@id="tablepress-15"]')
+        people_sel = sel.xpath('//tbody[@class="row-hover"]')
 
         for belmont_sel in people_sel:
-            item = University()
+            item = Bethany()
 
-            last_name = belmont_sel.xpath('//tbody[@class="row-hover"]/tr/td[1]/text()').extract()
+            last_name = belmont_sel.xpath('//tr/td[1]/text()').extract()
             if last_name:
                 item['last_name'] = last_name
 
-            first_name = belmont_sel.xpath('//tbody[@class="row-hover"]/tr/td[2]/text()').extract()
+            first_name = belmont_sel.xpath('//tr/td[2]/text()').extract()
             if first_name:
                 item['first_name'] = first_name
 
-            title = belmont_sel.xpath('//tbody[@class="row-hover"]/tr/td[3]/text()').extract()
+            title = belmont_sel.xpath('//tr/td[3]/text()').extract()
             if title:
                 item['title'] = title
 
-            institution = belmont_sel.xpath('//tbody[@class="row-hover"]/tr/td[4]/text()').extract()
-            if institution:
-                item['institution'] = institution
+            item['institution'] = 'Belmont Abbey'
             return item

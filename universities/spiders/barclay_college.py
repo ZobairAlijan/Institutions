@@ -46,7 +46,7 @@ class BarclayEduSpider(scrapy.Spider):
 
             item['institution'] = 'Barclay College',
 
-            email = barclay_sel.xpath('//div[@class="well"]/a/@href').extract()
+            email = barclay_sel.xpath('//div[@class="col-sm-6 col-md-4 col-lg-3"]/div/a/@href').extract()
             if email:
                 item['email'] = ' '.join([x.strip() for x in email])
 

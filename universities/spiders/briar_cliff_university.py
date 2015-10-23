@@ -6,13 +6,7 @@ from scrapy.selector import Selector
 
 from universities.items import University
 
-
-class BriarCliffSpider(scrapy.Spider):
-    """
-    Scrape all profiles from
-    http://www.briarcliff.edu
-
-    """
+class BellevueEduSpider(scrapy.Spider):
     name = "briar"
     allowed_domains = ["briarcliff.edu"]
     start_urls = (
@@ -21,41 +15,56 @@ class BriarCliffSpider(scrapy.Spider):
 
     def parse(self, response):
         """
-        Parse faculty page
+        Getting links to profiles
 
         """
         sel = Selector(response)
-        link_sel = sel.xpath('//table[@class="listings data"]/tr')
 
-        for cliff_sel in link_sel:
-            eid_mu = University()
+        links = sel.xpath('//table[@class="listings data"]//tr/td/strong/a/@href').extract()
+        for link in links:
+            p_link = 'http://www.briarcliff.edu%s' % link
+            request = Request(p_link, callback=self.parse_profile_page)
+            yield request
 
-            name = cliff_sel.xpath('//tr/td/strong/a/text()').extract()
-            if name:
-                eid_mu['name'] = name
+    def parse_profile_page(self, response):
+        """
+        Parse profile page
 
-            title = cliff_sel.xpath('//tr/td/span/text()').extract()
-            if title:
-                eid_mu['title'] = title
+        """
+        item = University()
+        sel = Selector(response)
 
-            department = cliff_sel.xpath('//tr/td/span[@class="department"]/text()').extract()
+        name = sel.xpath('//div[@class="column full article"]/h1/text()').extract()
+        if name:
+            item['name'] = ' '.join([x.strip() for x in name[0].split('\r\n') if x.strip()])
 
-            if department:
-                eid_mu['department'] = department
+        title = sel.xpath('//div[@class="left-side"]/h3/text()').extract()
+        if title:
+            item['title'] = ' '.join([x.strip() for x in title[0].split('\r\n') if x.strip()])
 
-            eid_mu['institution'] = 'Briar Cliff University'
+        department = sel.xpath('//strong[contains(text(), "Department:")]/following-sibling::text()').extract()
+        if department:
+            item['department'] = department[0]
 
-            email = cliff_sel.xpath('//p[contains(text(), "Email:")]/following-sibling::a/text()').extract()
-            if email:
-                eid_mu['email'] = email
+        item['institution'] = 'Briar Cliff College'
 
-            phone = cliff_sel .xpath('//tr/td[2]/strong/text()').extract()
+        email = sel.xpath('//strong[contains(text(), "Email:")]/following-sibling::a/text()').extract()
+        if email:
+            item ['email'] = email[0].strip()
 
-            if phone:
-                eid_mu['phone'] = phone
+        phone = sel.xpath('//strong[contains(text(), "Phone:")]/following-sibling::text()').extract()
+        if phone:
+            item['phone'] = phone[0].strip()
 
-            url = cliff_sel .xpath('//tr/td/strong/a/@href').extract()
+        url = sel.xpath('//table[@class="listings data"]//tr/td/strong/a/@href').extract()
+        if url:
+            item['url'] = url
+        return item
 
-            if url:
-                eid_mu['url'] = url
-            return eid_mu
+
+"""
+The Briar Cliff College also has the following information for faculty members
+
+Education, Bio and Curriculum
+
+"""

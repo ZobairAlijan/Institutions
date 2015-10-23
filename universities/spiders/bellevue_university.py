@@ -22,7 +22,7 @@ class BellevueEduSpider(scrapy.Spider):
 
         links = sel.xpath('//div[@class="col-750 shadow"]/section/ul/li/a/@href').extract()
         for link in links:
-            p_link = 'http://www.bellevue.edu%s' %link
+            p_link = 'http://www.bellevue.edu%s' % link
             request = Request(p_link, callback=self.parse_profile_page)
             yield request
 
@@ -34,29 +34,36 @@ class BellevueEduSpider(scrapy.Spider):
         item = University()
         sel = Selector(response)
 
-        name = sel.xpath('//div[@class="col-750 shadow"]/section/h1/text()').extract()
+        name = sel.xpath('//div[@class="col-750 shadow"]'
+                         '/section/h1/text()').extract()
         if name:
-            item['name'] = ' '.join([x.strip() for x in name[0].split('\r\n') if x.strip()])
+            item['name'] = ' '.join([x.strip() for x in name[0].split('\r\n')
+                                     if x.strip()])
 
         title = sel.xpath('//ul[@class="noBullets"]/li[1]/text()').extract()
         if title:
-            item['title'] = ' '.join([x.strip() for x in title[0].split('\r\n') if x.strip()])
+            item['title'] = ' '.join([x.strip() for x in title[0].split('\r\n')
+                                      if x.strip()])
 
-        department = sel.xpath('//ul[@class="noBullets"]/li[2]/text()').extract()
+        department = sel.xpath('//ul[@class="noBullets"]/li[2]/text()')\
+            .extract()
         if department:
             item['department'] = department
 
         item['institution'] = 'Bellevue University'
 
-        email = sel.xpath('//ul[@class="noBullets"]/li[3]/a/text()').extract()
+        email = sel.xpath('//ul[@class="noBullets"]/li[3]/a/text()')\
+            .extract()
         if email:
             item ['email'] = email[0].strip()
 
-        phone = sel.xpath('//ul[@class="noBullets"]/li[4]/text()').extract()
+        phone = sel.xpath('//ul[@class="noBullets"]/li[4]/text()')\
+            .extract()
         if phone:
             item['phone'] = phone[0].strip()
 
-        url = sel.xpath('//ul[@class="noBullets"]/li/a/@href').extract()
+        url = sel.xpath('//ul[@class="noBullets"]/li/a/@href')\
+            .extract()
         if url:
             item['url'] = url
         return item

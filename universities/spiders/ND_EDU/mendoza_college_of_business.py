@@ -4,7 +4,7 @@ import scrapy
 from scrapy.http import Request
 from scrapy.selector import Selector
 
-from universities.items import BabsonEduItem
+from universities.items import University
 
 
 class MendozaNdEduSpider(scrapy.Spider):
@@ -28,7 +28,7 @@ class MendozaNdEduSpider(scrapy.Spider):
         people_sel = sel.xpath('//ul[@id="people-list"]/li')
 
         for profile_sel in people_sel:
-            item = BabsonEduItem()
+            item = University()
 
             name = profile_sel.xpath('div/div/b[@class="person-fullname"]/a/text()').extract()
             if name:

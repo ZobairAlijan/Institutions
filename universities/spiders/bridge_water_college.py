@@ -2,7 +2,6 @@
 
 import scrapy
 import re
-from string import digits
 from scrapy.http import Request
 from scrapy.selector import Selector
 
@@ -24,13 +23,12 @@ class BridgeSpider(scrapy.Spider):
     def parse(self, response):
         """
         Get links to profiles
-
         """
         sel = Selector(response)
 
         links = sel.xpath('//ul[@class="people-list nobullets"]//div/a/@href').extract()
         for link in links:
-            p_link = 'http://www.bridgewater.edu%s' %link
+            p_link = 'http://www.bridgewater.edu%s' % link
             request = Request(p_link, callback=self.parse_profile_page)
             yield request
 
@@ -63,10 +61,14 @@ class BridgeSpider(scrapy.Spider):
         if email:
             water_sel['email'] = email
 
-        phone = sel.xpath('//strong[contains(text(), "Phone")]/following-sibling::text()').extract() + \
-            sel.xpath('//section[@class="user-markup content fullwidth no-overlap"]/p/text()').extract()
+        # try:
+        #     water_sel['phone'] = \
+        #         self.get_phone_number(sel.xpath('//section[@class="user-markup content fullwidth no-overlap"]/p/text()').extract())
+        # except:
+        #     water_sel['phone'] = ' '
 
+        phone = sel.xpath('//section[@class="user-markup content fullwidth no-overlap"]/p[1]/text()').extract()
         if phone:
-            water_sel['phone'] = ''.join(phone for phone in phone if phone.isdigit())
-
+            water_sel['phone'] = ' '.join([phone for phone in phone if phone])
         return water_sel
+

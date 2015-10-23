@@ -3,7 +3,7 @@
 import scrapy
 from scrapy.selector import Selector
 
-from universities.items import BabsonEduItem
+from universities.items import University
 
 
 class RealStateEduSpider(scrapy.Spider):
@@ -29,7 +29,7 @@ class RealStateEduSpider(scrapy.Spider):
         people_sel = sel.xpath('//div[@id="vt_body_col"]')
 
         for profile_sel in people_sel:
-            real_state = BabsonEduItem()
+            real_state = University()
 
             name = profile_sel.xpath('//div[@id="vt_body"]//tr/td[2]/a/text()').extract()
             if name:
