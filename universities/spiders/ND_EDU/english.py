@@ -12,7 +12,8 @@ class EnglishSpider(scrapy.Spider):
     )
 
     def parse(self, response):
-        yield scrapy.Request('http://english.nd.edu/people/faculty/newman/', meta={}, callback=self.parse_member)
+        yield scrapy.Request('http://english.nd.edu/people/faculty/newman/',
+                             meta={}, callback=self.parse_member)
 
         for e_url in response.xpath('//tbody/tr/td[1]/a/@href').extract():
             yield scrapy.Request(response.urljoin(e_url), meta={}, callback=self.parse_member)
@@ -20,11 +21,12 @@ class EnglishSpider(scrapy.Spider):
     def parse_member(self, response):
         params = dict(
             name=response.xpath('//h1[@class="page-title"]/text()').extract_first())
-        params['email'] = response.xpath('//main//a[contains(@href,"mailto:")]/text()').extract_first()
+        params['email'] = response.xpath\
+            ('//main//a[contains(@href,"mailto:")]/text()').extract_first()
 
         try:
-            params['phone'] = self.get_phone_number(response.xpath
-                                                    ('//main//a[contains(@href,"mailto:")]/../text()').extract())
+            params['phone'] = self.get_phone_number\
+                (response.xpath('//main//a[contains(@href,"mailto:")]/../text()').extract())
         except:
             params['phone'] = ''
 

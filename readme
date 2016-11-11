@@ -1,0 +1,11 @@
+If you have any problem with installing scrapy due to this messsage:
+
+"HTTPSConnectionPool(host='pypi.python.org', port=443): Read timed out."
+
+then install scarpy manually. 
+Go to utility-file/scrapy-master/
+
+run the following command:
+
+python setup.py install
+
